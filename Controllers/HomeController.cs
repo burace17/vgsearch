@@ -10,6 +10,13 @@ namespace vgsearch.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly VGDatabaseContext _context;
+
+        public HomeController(VGDatabaseContext context)
+        {
+            _context = context;   
+        }
+
         public IActionResult Index()
         {
             return View();
