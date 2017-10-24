@@ -7,3 +7,4 @@ apt-get install -y dotnet-sdk-2.0.0
 apt-get install -y postgresql
 runuser -l postgres -c $'echo "CREATE USER vgsearch WITH PASSWORD \'mypassword\'; CREATE DATABASE vgsearch;" | psql'
 useradd -m -p i.yiH7jRyi9hI -s /bin/bash vgsearch
+runuser -l postgres -c 'psql -d vgsearch -a -f /vagrant/initialize_db.sql'
