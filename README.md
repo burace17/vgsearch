@@ -1,17 +1,22 @@
 vgsearch
 ===================================
 
-## Vagrant installation method
+## Vagrant
 
 1. Download Vagrant [here](https://www.vagrantup.com/downloads.html)
 2. Download [VirtualBox](https://www.virtualbox.org/wiki/Download_Old_Builds_5_1) if you do not already have it installed. **Version 5.1 is required**
 3. Clone the git repository with the following command: `git clone https://github.com/burace17/vgsearch.git`
 4. Open a command line window in the repository folder and type `vagrant up`
 5. This will take a while. When it finishes and does not display any errors, use your SSH client (PuTTY if you are on Windows) to connect to the following server:
-    Hostname: localhost
-    Port: 2222
-    Username: vgsearch
-    Password: mypassword
+
+    **Hostname:** localhost
+    
+    **Port:** 2222
+    
+    **Username:** vgsearch
+    
+    **Password:** mypassword
+    
 6. Once logged in, change to the directory containing the app with `cd /vagrant`
 7. Finally, launch the app by typing `ASPNETCORE_URLS="http://0.0.0.0:5000" dotnet run`
     The ASPNETCORE_URLS environment variable needs to be set so that the app binds to all available interfaces. If this variable is not set, the app will not be accessible from the host machine. 
