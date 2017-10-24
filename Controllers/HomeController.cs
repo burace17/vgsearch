@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using vgsearch.Models;
 
@@ -19,7 +16,7 @@ namespace vgsearch.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_context.Games.ToList());
         }
 
         public IActionResult About()

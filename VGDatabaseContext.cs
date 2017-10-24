@@ -22,7 +22,7 @@ namespace vgsearch
 
            protected override void OnModelCreating(ModelBuilder builder)
            {
-               builder.Entity<Game>().ToTable("Game");
+               builder.Entity<Game>().ToTable("game");
            }
        }
 }
