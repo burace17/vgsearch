@@ -16,7 +16,7 @@ namespace vgsearch.Controllers
 
         public IActionResult Index()
         {
-            return View(_context.Games.ToList());
+            return View();
         }
 
         public IActionResult About()
