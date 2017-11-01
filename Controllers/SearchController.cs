@@ -44,7 +44,7 @@ namespace vgsearch.Controllers
             }
             if (comment != null)
             {
-                queryable = queryable.Where(x => x.comment.ToLower().Contains(comment.ToLower()));
+                queryable = queryable.Where(x => x.comments.ToLower().Contains(comment.ToLower()));
             }
             var result = await queryable.ToListAsync();
 

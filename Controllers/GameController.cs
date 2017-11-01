@@ -23,7 +23,7 @@ namespace vgsearch.Controllers
             if (id == null) return NotFound();
 
             // This will query the database for the game with the specified ID.
-            var game = await _context.Games.Where(x => x.id == id).SingleOrDefaultAsync();
+            var game = await _context.Games.Where(x => x.game_id == id).SingleOrDefaultAsync();
 
             if (game == null) return NotFound();
 
