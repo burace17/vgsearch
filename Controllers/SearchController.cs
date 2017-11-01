@@ -21,19 +21,21 @@ namespace vgsearch.Controllers
         // Simple name search. Returns all matches
         [HttpGet]
         [Route("/Search/Search")]
-        public async Task<List<Game>> Search([FromQuery]string query)
+        public async Task<IActionResult> Search([FromQuery]string query)
         {
             _logger.LogInformation(1002, "Searching for {query}", query);
-            if (query == null) return new List<Game>();
+            if (query == null) return View("/Views/Search/Search.cshtml", new List<Game>());
             
             // For each game, see if its name contains the input string and do a case insensitive comparison
-            return await _context.Games.Where(x => x.name.ToLower().Contains(query.ToLower())).ToListAsync();
+            var result = await _context.Games.Where(x => x.name.ToLower().Contains(query.ToLower())).ToListAsync();
+
+            return View("/Views/Search/Search.cshtml", result);
         }
 
         // Advanced search
         [HttpGet]
         [Route("/Search/AdvancedSearch")]
-        public async Task<List<Game>> AdvancedSearch([FromQuery]string name = null, [FromQuery]string comment = null)
+        public async Task<IActionResult> AdvancedSearch([FromQuery]string name = null, [FromQuery]string comment = null)
         {
             IQueryable<Game> queryable = _context.Games;
             if (name != null)
@@ -44,7 +46,9 @@ namespace vgsearch.Controllers
             {
                 queryable = queryable.Where(x => x.comment.ToLower().Contains(comment.ToLower()));
             }
-            return await queryable.ToListAsync();
+            var result = await queryable.ToListAsync();
+
+            return View("/Views/Search/Search.cshtml", result);
         }
     }
 }

@@ -2,3 +2,9 @@
 @{
     ViewData["Title"] = "Results";
 }
+<ul>
+@foreach (var game in Model)
+{
+    <li>@game.name</li>
+}
+</ul>
