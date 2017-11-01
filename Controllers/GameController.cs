@@ -16,7 +16,9 @@ namespace vgsearch.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Detail(int? id)
+        [HttpGet]
+        [Route("/Game/Detail")]
+        public async Task<IActionResult> Detail([FromQuery]int? id)
         {
             if (id == null) return NotFound();
 
