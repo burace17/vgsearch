@@ -25,7 +25,7 @@ namespace vgsearch.Controllers
         {
             _logger.LogInformation(1002, "Searching for {query}", query);
             if (query == null) return new List<Game>();
-
+            
             // For each game, see if its name contains the input string and do a case insensitive comparison
             return await _context.Games.Where(x => x.name.ToLower().Contains(query.ToLower())).ToListAsync();
         }
