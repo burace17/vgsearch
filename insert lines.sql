@@ -1,16 +1,9 @@
-create table game(game_id SERIAL PRIMARY KEY,
+CREATE TABLE game(game_id SERIAL PRIMARY KEY,
 				  name VARCHAR(255) NOT NULL,
 				  comments VARCHAR(255));
 				  
 GRANT SELECT,INSERT,UPDATE,DELETE ON game TO vgsearch;
-				  
-create table releases(release_id SERIAL PRIMARY KEY,
-				  FOREIGN KEY (rating_id) REFERENCES ratings (rating_id),
-				  FOREIGN KEY (publisher_id) REFERENCES publisher (publisher_id),
-				  FOREIGN KEY (region_id) REFERENCES region (region_id),
-				  FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
-				  dates date);
-				 
+
 create table ratings(rating_id SERIAL PRIMARY KEY,
 				age INT NOT NULL,
 				name VARCHAR(255) NOT NULL);
@@ -19,36 +12,62 @@ create table genre(genre_id SERIAL PRIMARY KEY,
 				   name VARCHAR(255) NOT NULL);
 				   
 create table region(region_id SERIAL PRIMARY KEY,
-				   unique name VARCHAR(255));
+				    name VARCHAR(255) NOT NULL);
 				   
 create table platform(platform_id SERIAL PRIMARY KEY,
 				      name VARCHAR(255) NOT NULL);
+
+create table publisher(publisher_id SERIAL PRIMARY KEY,
+					name VARCHAR(255) NOT NULL,
+					country_founded VARCHAR(255) NOT NULL,
+					city_founded VARCHAR(255));
+
+create table developer(developer_id SERIAL PRIMARY KEY,
+						name VARCHAR(255) NOT NULL,
+						country_founded VARCHAR(255) NOT NULL,
+						city_founded VARCHAR(255));
+				  
+create table releases(release_id SERIAL PRIMARY KEY,
+				  rating_id INT NOT NULL,
+				  publisher_id INT NOT NULL,
+				  region_id INT NOT NULL,
+				  platform_id INT NOT NULL,
+				  FOREIGN KEY (rating_id) REFERENCES ratings (rating_id),
+				  FOREIGN KEY (publisher_id) REFERENCES publisher (publisher_id),
+				  FOREIGN KEY (region_id) REFERENCES region (region_id),
+				  FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
+				  dates date);
+				 
+
 					  
 create table pc(pc_id SERIAL PRIMARY KEY,
+		  		platform_id INT NOT NULL,
+			    release_id INT NOT NULL,
+                game_id INT NOT NULL,
 				FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
 				FOREIGN KEY (release_id) REFERENCES releases (release_id),
 				FOREIGN KEY (game_id) REFERENCES game (game_id),
 				store VARCHAR(255) NOT NULL);
 				
 create table console(console_id SERIAL PRIMARY KEY,
+                platform_id INT NOT NULL,
+                release_id INT NOT NULL,
+                game_id INT NOT NULL,
 				FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
 				FOREIGN KEY (release_id) REFERENCES releases (release_id),
 				FOREIGN KEY (game_id) REFERENCES game (game_id),
 				generation VARCHAR(255) NOT NULL);
 				
-create table publisher(publisher_id SERIAL PRIMARY KEY,
-					name VARCHAR(255) NOT NULL,
-					country_founded VARCHAR(255) NOT NULL,
-					city_founded VARCHAR(255));
+
 					
-create table developer(developer_id SERIAL PRIMARY KEY,
-						name VARCHAR(255) NOT NULL,
-						country_founded VARCHAR(255) NOT NULL,
-						city_founded VARCHAR(255));
+
 
 create table gameHasGenre(
+                        game_id INT NOT NULL,
+                        genre_id INT NOT NULL,
+				        PRIMARY KEY (game_id, genre_id),
 						FOREIGN KEY (game_id) REFERENCES game (game_id),
-						FOREIGN KEY (genre_id) REFERENCES genre(genre_id),
+						FOREIGN KEY (genre_id) REFERENCES genre(genre_id)
 						);
 
 create table gameHasPublisher();
@@ -79,47 +98,47 @@ insert into game(name,comments) values  ('7 Days to Die', 'Fun game, made all th
 										('Doom','Its a survival horror game. But for your enemies.'),
 										('State of Decay','A really fun zombie game with unique settlement management gameplay.'),
 										('Super Meat Boy','Amazing game'),
-										('Deadlight','A solid game, experience that I happily played throught at least two times.'),
+										('Deadlight','A solid game, experience that I happily played throught at least two times.')
 										
 										;
 
 /* Data entry for releases*/
-insert into releases(dates) values  (2013-12-13), /*'7 Days to die' computer*/
-									(2016-1-6), /*'7 Days to die' console*/
-									(2015-10-15), /*'Broforce' computer*/
-									(2016-3-1), /*'Broforce' console*/
-									(2011-9-28), /*The Binding of Isaac*/
-									(2013-5-30), /*Cloudberry Kingdom*/
-									(2015-4-9), /*I am Bread*/
-									(2007-10-10), /*Team Fortress 2*/
-									(2015-5-5), /*Tabletop Simulator*/
-									(2011-1-25), /*Magicka*/
-									(2015-6-7), /*Rocket League*/
-									(2016-2-17), /*Rocket League*/
-									(2006-9-15), /*The Ship EU*/
-									(2007-2-15), /*The Ship NA*/
-									(2010-3-25), /*Blur NA*/
-									(2010-3-28), /*Blur EU*/
-									(2006-11-7), /*Gears of War*/
-									(2001-11-15), /*Halo: Combat Evolved*/
-									(2006-11-29), /*Garry's Mod */
-									(2008-11-17), /* Left 4 Dead*/
-									(2004-11-9), /*Halo 2 Xbox release*/ 
-									(2007-5-31), /*Halo 2 PC release*/
-									(2017-3-23), /*PlayerUnknown's Battlegrounds PC */
+insert into releases(dates) values  ('2013-12-13'), /*'7 Days to die' computer*/
+									('2016-1-6'), /*'7 Days to die' console*/
+									('2015-10-15'), /*'Broforce' computer*/
+									('2016-3-1'), /*'Broforce' console*/
+									('2011-9-28'), /*The Binding of Isaac*/
+									('2013-5-30'), /*Cloudberry Kingdom*/
+									('2015-4-9'), /*I am Bread*/
+									('2007-10-10'), /*Team Fortress 2*/
+									('2015-5-5'), /*Tabletop Simulator*/
+									('2011-1-25'), /*Magicka*/
+									('2015-6-7'), /*Rocket League*/
+									('2016-2-17'), /*Rocket League*/
+									('2006-9-15'), /*The Ship EU*/
+									('2007-2-15'), /*The Ship NA*/
+									('2010-3-25'), /*Blur NA*/
+									('2010-3-28'), /*Blur EU*/
+									('2006-11-7'), /*Gears of War*/
+									('2001-11-15'), /*Halo: Combat Evolved*/
+									('2006-11-29'), /*Garry's Mod */
+									('2008-11-17'), /* Left 4 Dead*/
+									('2004-11-9'), /*Halo 2 Xbox release*/ 
+									('2007-5-31'), /*Halo 2 PC release*/
+									('2017-3-23'), /*PlayerUnknown's Battlegrounds PC */
 									(NULL), /*PlayerUnknown's Battlegrounds Console*/
-									(2013-12-19), /*The Stanley Parabol*/
-									(2012-9-14),/*FTL: Faster Than Light PC*/
-									(2014-4-3),/*FTL: Faster Than Light IOS*/
-									(2011-4-8),/*Dino D-Day*/
-									(2013-4-23),/* Don't Starve*/
-									(2016-3-13),/*Doom PC Consoles*/
-									(2017-11-10),/*Doom Switch*/
-									(2013-6-5), /* State of Decay*/
-									(2010-10-20), /*Super Meat Boy*/
-									(2012-8-1), /*Deadlight xbox*/
-									(2012-10-25), /*Deadlight PC*/
-									(2016-6-21), /*Deadlight the rest*/
+									('2013-12-19'), /*The Stanley Parabol*/
+									('2012-9-14'),/*FTL: Faster Than Light PC*/
+									('2014-4-3'),/*FTL: Faster Than Light IOS*/
+									('2011-4-8'),/*Dino D-Day*/
+									('2013-4-23'),/* Don't Starve*/
+									('2016-3-13'),/*Doom PC Consoles*/
+									('2017-11-10'),/*Doom Switch*/
+									('2013-6-5'), /* State of Decay*/
+									('2010-10-20'), /*Super Meat Boy*/
+									('2012-8-1'), /*Deadlight xbox*/
+									('2012-10-25'), /*Deadlight PC*/
+									('2016-6-21') /*Deadlight the rest*/
 									
 									;
 
@@ -154,7 +173,7 @@ insert into genre(name) values  ('survival'),
 								('third person shooter'),
 								('Sandbox'),
 								('Strategy'),
-								('Adventure'),
+								('Adventure')
 																
 ;
 
@@ -205,7 +224,7 @@ insert into publisher(name, country_founded, city_founded) values   ('The Fun Pi
 																	('Klei Entertainment','CA','Vancouver'), /* Don't Starve*/
 																	('Bethesda Softworks','US','Bethesda'), /*Doom*/
 																	('Team Meat','US','Asheville'), /*super meat boy*/
-																	('Deep Silver','DE','Germany'), /*Deadlight everything else*/
+																	('Deep Silver','DE','Germany') /*Deadlight everything else*/
 																	
 ;
 
@@ -234,6 +253,6 @@ insert into developer(name, country_founded, city_founded) values   ('The Fun Pi
 																	('id Software','US','Mesquite'), /*Doom*/
 																	('Undead Labs','US','Seattle'),	 /* State of Decay*/
 																	('Team Meat','US','Asheville'), /*super meat boy*/
-																	('Tequila','ES','Madrid'), /*Deadlight*/
+																	('Tequila','ES','Madrid') /*Deadlight*/
 																	
 ;
