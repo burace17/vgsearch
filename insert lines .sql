@@ -1,3 +1,16 @@
+drop table game cascade;
+drop table ratings cascade;
+drop table genre cascade;
+drop table region cascade;
+drop table platform cascade;
+drop table publisher cascade;
+drop table developer cascade;
+drop table releases cascade;
+drop table pc cascade;
+drop table console cascade;
+drop table gameHasGenre cascade;
+drop table gameHasPublisher cascade;
+
 CREATE TABLE game(game_id SERIAL PRIMARY KEY,
 				  name VARCHAR(255) NOT NULL,
 				  comments VARCHAR(255));
@@ -42,20 +55,12 @@ create table releases(release_id SERIAL PRIMARY KEY,
 					  
 create table pc(pc_id SERIAL PRIMARY KEY,
 		  		platform_id INT NOT NULL,
-			    release_id INT NOT NULL,
-                game_id INT NOT NULL,
 				FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
-				FOREIGN KEY (release_id) REFERENCES releases (release_id),
-				FOREIGN KEY (game_id) REFERENCES game (game_id),
 				store VARCHAR(255) NOT NULL);
 				
 create table console(console_id SERIAL PRIMARY KEY,
                 platform_id INT NOT NULL,
-                release_id INT NOT NULL,
-                game_id INT NOT NULL,
 				FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
-				FOREIGN KEY (release_id) REFERENCES releases (release_id),
-				FOREIGN KEY (game_id) REFERENCES game (game_id),
 				generation VARCHAR(255) NOT NULL);
 				
 
@@ -158,7 +163,7 @@ insert into game(name,comments) values  ('7 Days to Die', 'Fun game, made all th
 										('Valis III','Was an excelent game.The fact that you could choose between three characters at any given point was nice.'),
 										('Traysia','Was a fun but hard RPG'),
 										('Rocket Knight Adventures','The battle against the pigs was fun and the rocketpack was a nice touch.'),
-										('Disgaea: Hour of Darkness','The fact that this game made fun of everything unde the sun was awsome.'),
+										('Disgaea: Hour of Darkness','The fact that this game made fun of everything unde the sun was awsome.')
 										;
 
 /* Data entry for releases*/
@@ -197,7 +202,7 @@ insert into releases(dates) values  ('2013-12-13'), /*'7 Days to die' computer*/
 									('2010-10-20'), /*Super Meat Boy*/
 									('2012-8-1'), /*Deadlight xbox*/
 									('2012-10-25'), /*Deadlight PC*/
-									('2016-6-21') /*Deadlight the rest*/
+									('2016-6-21'), /*Deadlight the rest*/
 									('1987-12-17'), /*Rockman NES*/
 									('1986-2-21'), /*Legend of Zeld NES*/
 									('1989-8-15'), /*Where in Time is Carmen Sandiego? NES*/
@@ -209,7 +214,7 @@ insert into releases(dates) values  ('2013-12-13'), /*'7 Days to die' computer*/
 									('2000-7-7'), /*Final Fantasy IX PS1*/
 									('2002-5-16'), /*Final Fantasy XI PS2 and PC*/
 									('2013-8-24'), /*Final Fantasy XIV PS3 PS4 PC*/
-									('2015-3-2015'), /*Senran Kagura: Estival Versus PS4*/
+									('2015-3-15'), /*Senran Kagura: Estival Versus PS4*/
 									('1997-8-15'), /*Time Crisis PS1*/
 									('2007-10-26'), /*The Witcher PC*/
 									('2011-5-17'), /*The Witcher 2: Assassins of Kings PC + xbox360*/
@@ -236,7 +241,7 @@ insert into releases(dates) values  ('2013-12-13'), /*'7 Days to die' computer*/
 									('1989-7-18'), /*Willow NES*/
 									('1992-12-17'), /*World of Illusion Starring Mickey Mouse and Donald Duck Sega*/
 									('1990-11-10'), /*Silver Surfer NES*/
-									('--'), /*HyperDimension Neptunia V PS4*/
+									(NULL), /*HyperDimension Neptunia V PS4*/
 									('2007-4-12'), /*GrimGrimoire PS2*/
 									('2009-10-1'), /*Trinity Universe PS3*/
 									('2009-6-25'), /*Record of Agarest War Zero PS3 Xbox360*/
@@ -252,11 +257,11 @@ insert into releases(dates) values  ('2013-12-13'), /*'7 Days to die' computer*/
 									('1997-12-18'), /*Grandia PS1*/
 									('1989-12-16'), /*Sword OF Vermilion Sega*/
 									('1986-12-11'), /*Valis Sega*/
-									('1989-6-1989'), /*Valis II Sega*/
+									('1989-6-23'), /*Valis II Sega*/
 									('1990-9-7'), /*Valis III Sega*/
 									('1992-2-14'), /*Traysia Sega*/
-									('--'), /*Rocket Knight Adventures Sega*/
-									('2003-1-30'), /*Disgaea: Hour of Darkness PS2*/
+									(NULL), /*Rocket Knight Adventures Sega*/
+									('2003-1-30') /*Disgaea: Hour of Darkness PS2*/
 									;
 
 /* Data entry for ratings*/
@@ -318,25 +323,25 @@ insert into platform(name) values   ('PC'),
 									('console');
 
 /* Data entry for pc*/
-insert into pc (store) values   ('steam'),
-								('origin'),
-								('retail')
+insert into pc (platform_id,store) values   (1, 'steam'),
+								(1, 'origin'),
+								(1, 'retail')
 								;
 
 /* Data entry for console*/
-insert into console(generation) values  ('xbox'),
-										('playstation'),
-										('nintendo'),
-										('Sega'),
-										('playstation 2'),
-										('playstation 3'),
-										('playstation 4'),
-										('Super Nintendo'),
-										('Nintendo 64'),
-										('xbox 360'),
-										('gamecube'),
-										('playstation vita'),
-										('wii');
+insert into console(platform_id,generation) values  (2, 'xbox'),
+										(2, 'playstation'),
+										(2, 'nintendo'),
+										(2, 'Sega'),
+										(2, 'playstation 2'),
+										(2, 'playstation 3'),
+										(2, 'playstation 4'),
+										(2, 'Super Nintendo'),
+										(2, 'Nintendo 64'),
+										(2, 'xbox 360'),
+										(2, 'gamecube'),
+										(2,'playstation vita'),
+										(2, 'wii');
 
 /* Data entry for publisher*/
 insert into publisher(name, country_founded, city_founded) values   ('The Fun Pimps', 'US', 'Dallas'),/*'7 Days to die' */
@@ -346,7 +351,7 @@ insert into publisher(name, country_founded, city_founded) values   ('The Fun Pi
 																	('Bossa Studios','EN','London'), /*I am Bread*/
 																	('Valve','US','Bellevue'), /*Team Fortress 2*/ /*garry's mod*/ /* Left 4 Dead*/
 																	('Berserk','US','Stuart'), /*Tabletop Simulator*/
-																	('Paradox Interactive','SE','Stockholm') /*Magicka*/
+																	('Paradox Interactive','SE','Stockholm'), /*Magicka*/
 																	('Psyonix','US','Satellite Beach'), /*Rocket League*/
 																	('Blazing Griffin','GB','Glasgow'), /* The Ship*/
 																	('Activision','US','Santa Monica'), /* Blur*/
@@ -358,20 +363,20 @@ insert into publisher(name, country_founded, city_founded) values   ('The Fun Pi
 																	('Klei Entertainment','CA','Vancouver'), /* Don't Starve*/
 																	('Bethesda Softworks','US','Bethesda'), /*Doom*/
 																	('Team Meat','US','Asheville'), /*super meat boy*/
-																	('Deep Silver','DE','Germany'), /*Deadlight everything else*/
+																	('Deep Silver','DE','Germany') /*Deadlight everything else*/
 																	
 ;
 
 
 /* Data entry for developer*/
 insert into developer(name, country_founded, city_founded) values   ('The Fun Pimps Entertainment LLC', 'US', 'Dallas'),/*'7 Days to die' */
-																	('Free Lives', 'ZA', 'Cape Town') /*Broforce */
-																	('Edmund McMillen Florian Himsl', ,),/*The Binding of Isaac*/
-																	('Pwnee Studios', 'US' , 'New York') /*Cloudberry Kingdom*/
+																	('Free Lives', 'ZA', 'Cape Town'), /*Broforce */
+																	('Edmund McMillen Florian Himsl', 'US','Santa Cruz'),/*The Binding of Isaac*/
+																	('Pwnee Studios', 'US' , 'New York'), /*Cloudberry Kingdom*/
 																	('Bossa Studios','GB','London'), /*I am Bread*/
 																	('Valve','US','Bellevue'), /*Team Fortress 2*/ /* Left 4 Dead*/
 																	('Berserk','US','Stuart'), /*Tabletop Simulator*/
-																	('Arrowhead Game Studios','SE','Stockholm')/*Magicka*/
+																	('Arrowhead Game Studios','SE','Stockholm'), /*Magicka*/
 																	('Psyonix','US','Satellite Beach'), /*Rocket League*/
 																	('Outright', 'GB', 'Edinburgh' ), /*The Ship*/
 																	('Bizarre Creations','GB','Liverpool'), /*blur*/
@@ -387,6 +392,6 @@ insert into developer(name, country_founded, city_founded) values   ('The Fun Pi
 																	('id Software','US','Mesquite'), /*Doom*/
 																	('Undead Labs','US','Seattle'),	 /* State of Decay*/
 																	('Team Meat','US','Asheville'), /*super meat boy*/
-																	('Tequila','ES','Madrid'), /*Deadlight*/
+																	('Tequila','ES','Madrid') /*Deadlight*/
 																	
 ;
