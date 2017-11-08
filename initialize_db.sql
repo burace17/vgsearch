@@ -20,25 +20,31 @@ GRANT SELECT,INSERT,UPDATE,DELETE ON game TO vgsearch;
 create table ratings(rating_id SERIAL PRIMARY KEY,
 				age INT NOT NULL,
 				name VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON ratings TO vgsearch;
 					
 create table genre(genre_id SERIAL PRIMARY KEY,
 				   name VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON genre TO vgsearch;
 				   
 create table region(region_id SERIAL PRIMARY KEY,
 				    name VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON region TO vgsearch;
 				   
 create table platform(platform_id SERIAL PRIMARY KEY,
 				      name VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON platform TO vgsearch;
 
 create table publisher(publisher_id SERIAL PRIMARY KEY,
 					name VARCHAR(255) NOT NULL,
 					country_founded VARCHAR(255) NOT NULL,
 					city_founded VARCHAR(255));
+GRANT SELECT,INSERT,UPDATE,DELETE ON publisher TO vgsearch;
 
 create table developer(developer_id SERIAL PRIMARY KEY,
 						name VARCHAR(255) NOT NULL,
 						country_founded VARCHAR(255) NOT NULL,
 						city_founded VARCHAR(255));
+GRANT SELECT,INSERT,UPDATE,DELETE ON developer TO vgsearch;
 				  
 create table releases(release_id SERIAL PRIMARY KEY,
 				  rating_id INT NOT NULL,
@@ -50,19 +56,20 @@ create table releases(release_id SERIAL PRIMARY KEY,
 				  FOREIGN KEY (region_id) REFERENCES region (region_id),
 				  FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
 				  dates date);
-				 
+GRANT SELECT,INSERT,UPDATE,DELETE ON releases TO vgsearch;			 
 
 					  
 create table pc(pc_id SERIAL PRIMARY KEY,
 		  		platform_id INT NOT NULL,
 				FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
 				store VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON pc TO vgsearch;
 				
 create table console(console_id SERIAL PRIMARY KEY,
                 platform_id INT NOT NULL,
 				FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
 				generation VARCHAR(255) NOT NULL);
-				
+GRANT SELECT,INSERT,UPDATE,DELETE ON console TO vgsearch;				
 
 					
 
@@ -74,9 +81,12 @@ create table gameHasGenre(
 						FOREIGN KEY (game_id) REFERENCES game (game_id),
 						FOREIGN KEY (genre_id) REFERENCES genre(genre_id)
 						);
+GRANT SELECT,INSERT,UPDATE,DELETE ON gameHasGenre TO vgsearch;
 
 create table gameHasPublisher();
+GRANT SELECT,INSERT,UPDATE,DELETE ON gameHasPublisher TO vgsearch;
 
+GRANT USAGE,SELECT ON ALL SEQUENCES IN SCHEMA PUBLIC TO vgsearch;
 
 /* Data entry for game*/
 insert into game(name,comments) values  ('7 Days to Die', 'Fun game, made all the more fun when played with a group of friends, trying to survive against the zombie onslaught.'),
