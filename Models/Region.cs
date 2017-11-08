@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace vgsearch.Models
 {
     public class Region
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        [Key]
+        public int region_id { get; set; }
+        public string name { get; set; }
     }
 }

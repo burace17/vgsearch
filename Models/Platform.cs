@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace vgsearch.Models
 {
     public class Platform
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        [Key]
+        public int platform_id { get; set; }
+        public string name { get; set; }
     }
 }

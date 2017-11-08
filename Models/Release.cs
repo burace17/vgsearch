@@ -1,9 +1,12 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace vgsearch.Models
 {
     public class Release
     {
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
+        [Key]
+        public int release_id { get; set; }
+        public DateTime dates { get; set; }
     }
 }
