@@ -32,6 +32,10 @@ namespace vgsearch
                builder.Entity<Rating>().ToTable("ratings");
                builder.Entity<Region>().ToTable("region");
                builder.Entity<Release>().ToTable("releases");
+
+               builder.Entity<Release>().HasOne(r => r.Game)
+                                        .WithMany(g => g.Releases)
+                                        .HasForeignKey(r => r.game_id);
            }
        }
 }

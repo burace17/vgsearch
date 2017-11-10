@@ -8,3 +8,10 @@
 <p>
     @Model.comments
 </p>
+
+<ul>
+    @foreach (var release in @Model.Releases)
+    {
+        <li>@release.dates</li>
+    }
+</ul>

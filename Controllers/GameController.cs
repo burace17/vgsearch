@@ -27,6 +27,7 @@ namespace vgsearch.Controllers
 
             if (game == null) return NotFound();
 
+            await _context.Entry(game).Collection(g => g.Releases).LoadAsync();
             return View(game);
         }
     }

@@ -51,10 +51,12 @@ create table releases(release_id SERIAL PRIMARY KEY,
 				  publisher_id INT NOT NULL,
 				  region_id INT NOT NULL,
 				  platform_id INT NOT NULL,
+				  game_id INT NOT NULL,
 				  FOREIGN KEY (rating_id) REFERENCES ratings (rating_id),
 				  FOREIGN KEY (publisher_id) REFERENCES publisher (publisher_id),
 				  FOREIGN KEY (region_id) REFERENCES region (region_id),
 				  FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
+				  FOREIGN KEY (game_id) REFERENCES game (game_id),
 				  dates date);
 GRANT SELECT,INSERT,UPDATE,DELETE ON releases TO vgsearch;			 
 
