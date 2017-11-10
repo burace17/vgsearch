@@ -9,5 +9,7 @@ namespace vgsearch.Models
         public string name { get; set; }
         public string city_founded { get; set; }
         public string country_founded { get; set; }
+
+        public override string ToString() => name;
     }
 }

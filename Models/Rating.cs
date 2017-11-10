@@ -8,5 +8,6 @@ namespace vgsearch.Models
         public int rating_id { get; set; }
         public string name { get; set; }
         public int age { get; set; }
+        public override string ToString() => name;
     }
 }

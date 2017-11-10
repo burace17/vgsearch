@@ -7,5 +7,6 @@ namespace vgsearch.Models
         [Key]
         public int genre_id { get; set; }
         public string name { get; set; }
+        public override string ToString() => name;
     }
 }

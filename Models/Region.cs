@@ -7,5 +7,6 @@ namespace vgsearch.Models
         [Key]
         public int region_id { get; set; }
         public string name { get; set; }
+        public override string ToString() => name;
     }
 }

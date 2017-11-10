@@ -9,9 +9,20 @@
     @Model.comments
 </p>
 
-<ul>
-    @foreach (var release in @Model.Releases)
+<table border="1">
+    <tr>
+        <th>Date</th>
+        <th>Publisher</th>
+        <th>Region</th>
+        <th>Platform</th>
+    </tr>
+    @foreach(var release in Model.Releases)
     {
-        <li>@release.dates</li>
+        <tr>
+            <td>@release.dates</td>
+            <td>@release.Publisher</td>
+            <td>@release.Region</td>
+            <td>@release.Platform</td>
+        </tr>
     }
-</ul>
+</table>

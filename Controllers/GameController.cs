@@ -27,7 +27,15 @@ namespace vgsearch.Controllers
 
             if (game == null) return NotFound();
 
+            // Populate the collection of game releases.
             await _context.Entry(game).Collection(g => g.Releases).LoadAsync();
+
+            foreach (Release r in game.Releases)
+            {
+                await _context.Entry(r).Reference(re => re.Publisher).LoadAsync();
+                await _context.Entry(r).Reference(re => re.Region).LoadAsync();
+                await _context.Entry(r).Reference(re => re.Platform).LoadAsync();
+            }
             return View(game);
         }
     }
