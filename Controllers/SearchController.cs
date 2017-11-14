@@ -35,9 +35,14 @@ namespace vgsearch.Controllers
         // Advanced search
         [HttpGet]
         [Route("/Search/AdvancedSearch")]
-        public async Task<IActionResult> AdvancedSearch([FromQuery]string name = null, [FromQuery]string comment = null)
+        public async Task<IActionResult> AdvancedSearch([FromQuery]string name = null, [FromQuery]string comment = null,
+                                                        [FromQuery]string date = null, [FromQuery]string publisher = null,
+                                                        [FromQuery]string rating = null, [FromQuery]string platform = null,
+                                                        [FromQuery]string region = null)
         {
-            IQueryable<Game> queryable = _context.Games;
+            IQueryable<Game> queryable = _context.Games.Include(game => game.Releases);
+            _context.Releases.Include(r => r.Publisher).Include(r => r.Rating).Include(r => r.Platform).Include(r => r.Region);
+
             if (name != null)
             {
                 queryable = queryable.Where(x => x.name.ToLower().Contains(name.ToLower()));
@@ -46,6 +51,23 @@ namespace vgsearch.Controllers
             {
                 queryable = queryable.Where(x => x.comments.ToLower().Contains(comment.ToLower()));
             }
+            if (date != null)
+            {
+                queryable = queryable.Where(x => x.Releases.Any(r => r.dates.ToString() == date)); // TODO: Check date formatting...
+            }
+            if (publisher != null)
+            {
+                queryable = queryable.Where(x => x.Releases.Any(r => r.Publisher.name == publisher));
+            }
+            if (rating != null)
+            {
+                queryable = queryable.Where(x => x.Releases.Any(r => r.Rating.name == rating));
+            }
+            if (region != null)
+            {
+                queryable = queryable.Where(x => x.Releases.Any(r => r.Region.name == region));
+            }
+
             var result = await queryable.ToListAsync();
 
             return View("/Views/Search/Search.cshtml", result);
