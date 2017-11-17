@@ -41,10 +41,12 @@ create table developer(developer_id SERIAL PRIMARY KEY,
 						city_founded VARCHAR(255));
 				  
 create table releases(release_id SERIAL PRIMARY KEY,
+				  game_id INT NOT NULL,
 				  rating_id INT NOT NULL,
 				  publisher_id INT NOT NULL,
 				  region_id INT NOT NULL,
 				  platform_id INT NOT NULL,
+				  FOREIGN KEY (game_id) REFERENCES game(game_id),
 				  FOREIGN KEY (rating_id) REFERENCES ratings (rating_id),
 				  FOREIGN KEY (publisher_id) REFERENCES publisher (publisher_id),
 				  FOREIGN KEY (region_id) REFERENCES region (region_id),
@@ -64,9 +66,6 @@ create table console(console_id SERIAL PRIMARY KEY,
 				generation VARCHAR(255) NOT NULL);
 				
 
-					
-
-
 create table gameHasGenre(
                         game_id INT NOT NULL,
                         genre_id INT NOT NULL,
@@ -75,7 +74,14 @@ create table gameHasGenre(
 						FOREIGN KEY (genre_id) REFERENCES genre(genre_id)
 						);
 
-create table gameHasPublisher();
+create table gameHasDeveloper(
+						game_id INT NOT NULL,
+                        developer_id INT NOT NULL,
+				        PRIMARY KEY (game_id, developer_id),
+						FOREIGN KEY (game_id) REFERENCES game (game_id),
+						FOREIGN KEY (developer_id) REFERENCES developer(developer_id)
+						);
+
 
 
 /* Data entry for game*/
@@ -182,153 +188,148 @@ insert into game(game_id, name,comments) values  (1, '7 Days to Die', 'Fun game,
 										;
 
 /* Data entry for releases*/
-insert into releases(dates) values  ('2013-12-13'), /*'7 Days to die' computer*/
-									('2016-1-6'), /*'7 Days to die' console*/
-									('2015-10-15'), /*'Broforce' computer*/
-									('2016-3-1'), /*'Broforce' console*/
-									('2011-9-28'), /*The Binding of Isaac*/
-									('2013-5-30'), /*Cloudberry Kingdom*/
-									('2015-4-9'), /*I am Bread*/
-									('2007-10-10'), /*Team Fortress 2*/
-									('2015-5-5'), /*Tabletop Simulator*/
-									('2011-1-25'), /*Magicka*/
-									('2015-6-7'), /*Rocket League*/
-									('2016-2-17'), /*Rocket League*/
-									('2006-9-15'), /*The Ship EU*/
-									('2007-2-15'), /*The Ship NA*/
-									('2010-3-25'), /*Blur NA*/
-									('2010-3-28'), /*Blur EU*/
-									('2006-11-7'), /*Gears of War*/
-									('2001-11-15'), /*Halo: Combat Evolved*/
-									('2006-11-29'), /*Garry's Mod */
-									('2008-11-17'), /* Left 4 Dead*/
-									('2004-11-9'), /*Halo 2 Xbox release*/ 
-									('2007-5-31'), /*Halo 2 PC release*/
-									('2017-3-23'), /*PlayerUnknown's Battlegrounds PC */
-									(NULL), /*PlayerUnknown's Battlegrounds Console*/
-									('2013-12-19'), /*The Stanley Parabol*/
-									('2012-9-14'),/*FTL: Faster Than Light PC*/
-									('2014-4-3'),/*FTL: Faster Than Light IOS*/
-									('2011-4-8'),/*Dino D-Day*/
-									('2013-4-23'),/* Don't Starve*/
-									('2016-3-13'),/*Doom PC Consoles*/
-									('2017-11-10'),/*Doom Switch*/
-									('2013-6-5'), /* State of Decay*/
-									('2010-10-20'), /*Super Meat Boy*/
-									('2012-8-1'), /*Deadlight xbox*/
-									('2012-10-25'), /*Deadlight PC*/
-									('2016-6-21'), /*Deadlight the rest*/
-									('1987-12-17'), /*Rockman NES*/
-									('1986-2-21'), /*Legend of Zeld NES Japanese*/
-									('1986-8-22'), /*Legend of Zeld NES American*/
-									('1989-8-15'), /*Where in Time is Carmen Sandiego? NES*/
-									('1991-3-29'), /*Shining in the darkness Sega*/
-									('1991-4-26'), /*Langrisser*/
-									('1985-9-13'), /*Super Mario Brothers NES JP*/
-									('1985-10-18'),/*Super Mario Brothers NES US*/
-									('1993-12-17'), /*Mega Man X SNES*/
-									('1997-1-31'), /*Final Fantasy VII PS1 JP*/
-									('1997-11-17'), /*Final Fantasy VII PS1 EN*/
-									('1997-9-7'), /*Final Fantasy VII PS1 US*/
-									('2000-7-7'), /*Final Fantasy IX PS1*/
-									('2002-5-16'), /*Final Fantasy XI PS2 and PC*/
-									('2013-8-24'), /*Final Fantasy XIV PS3 PS4 PC*/
-									('2015-3-15'), /*Senran Kagura: Estival Versus PS4 JP*/
-									('1997-8-15'), /*Time Crisis PS1*/
-									('2007-10-26'), /*The Witcher PC*/
-									('2011-5-17'), /*The Witcher 2: Assassins of Kings PC + xbox360*/
-									('2015-5-19'), /*The Witcher 3: Wild Hunt PC PS4*/
-									('1998-6-1'), /*Quest 64 N64*/
-									('2005-9-22'), /*Suikoden Tatics PS2*/
-									('2006-2-23'), /*Suikoden V PS2*/
-									('2004-8-19'), /*Suikoden IV PS2*/
-									('2002-7-11'), /*Suikoden III PS2*/
-									('1998-12-17'), /*Suikoden II PS1*/
-									('1995-12-15'), /*Suikoden PS1*/
-									('2002-9-23'), /*Summoner 2 PS2 GameCube*/
-									('2000-10-24'), /*Summoner PS2 PC*/
-									('2005-3-24'), /*Wild Arms 4 PS2*/
-									('2002-3-14'), /*Wild Arms 3 PS2*/
-									('1999-9-2'), /*Wild Arms 2 PS1*/
-									('1996-12-20'), /*Wild Arms PS1*/
-									('2013-10-10'), /*Tales of Symphonia Chronicales PS3*/
-									('2013-10-10'), /*Fairy Fencer F PS3*/
-									('2011-8-18'), /*HyperDimension Neptunia mk2 PS3 Playstation Vita*/
-									('2004-10-26'), /*Bards Tale PS2*/
-									('2008-6-12'), /*Metal Gear Solid 4:Guns of the Patriots PS3*/
-									('2008-9-25'), /*Cross Edge PS3*/
-									('1989-7-18'), /*Willow NES*/
-									('1992-12-17'), /*World of Illusion Starring Mickey Mouse and Donald Duck Sega*/
-									('1990-11-10'), /*Silver Surfer NES*/
-									('2010-8-19'), /*HyperDimension Neptunia V PS4*/
-									('2007-4-12'), /*GrimGrimoire PS2*/
-									('2009-10-1'), /*Trinity Universe PS3*/
-									('2009-6-25'), /*Record of Agarest War Zero PS3 Xbox360*/
-									('2010-7-8'), /*White Knight Chronicles  II PS3*/
-									('2008-12-25'), /*White Knight Chronicles  PS3*/
-									('2013-1-24'), /*The Guided Fate ParaDox PS3*/
-									('2012-3-22'), /*Mugen Souls PS3*/
-									('2015-3-26'), /*Sword Art Online: Lost Song PS4 PS3 PSVista*/
-									('2013-4-25'), /*Mugen Souls Z PS3*/
-									('2002-2-28'), /*XenoSaga PS2*/
-									('2005-8-4'), /*Grandia III PS2*/
-									('2000-8-3'), /*Grandia II PS2*/
-									('1997-12-18'), /*Grandia PS1*/
-									('1989-12-16'), /*Sword OF Vermilion Sega*/
-									('1986-12-11'), /*Valis Sega*/
-									('1989-6-23'), /*Valis II Sega*/
-									('1990-9-7'), /*Valis III Sega*/
-									('1992-2-14'), /*Traysia Sega*/
-									('1993-8-6'), /*Rocket Knight Adventures Sega JP*/
-									('1993-8-5'), /*Rocket Knight Adventures Sega US*/
-									('1993-8-7'), /*Rocket Knight Adventures Sega EU*/
-									('2003-1-30'), /*Disgaea: Hour of Darkness PS2*/
-									('2014-10-7'), /*Project Spark NA*/
-									('2014-10-9'), /*Project Spark AU*/
-									('2014-10-10'), /*Project Spark EU*/
-									('2014-10-28'), /*Sunset Overdrive NA*/ 
-									('2014-10-30'), /*Sunset Overdrive AU*/ 
-									('2014-10-31'), /*Sunset Overdrive EU*/ 
-									('2006-8-8'), /*Dead Rising NA*/
-									('2006-9-8'), /*Dead Rising EU*/
-									('2006-9-14'), /*Dead Rising AU*/
-									('2006-9-28'), /*Dead Rising JP*/
-									('2016-9-13'), /*Dead Rising Rerelease ps4, X1, MWS*/
-									('2004-9-14'), /*Fable*/
-									('2008-8-21'), /*Fable 2 NA*/
-									('2008-8-23'), /*Fable 2 AU*/
-									('2008-8-24'), /*Fable 2 EU*/
-									('2007-2-20'), /*Crackdown NA*/
-									('2007-2-22'), /*Crackdown AU*/
-									('2007-2-23'), /*Crackdown EU*/
-									('2010-7-6'), /*Crackdown 2 NA*/
-									('2010-7-8'), /*Crackdown 2 AU*/
-									('2010-7-9'), /*Crackdown 2 EU*/
-									('2010-12-8'), /*Doritos Crash Course*/
-									('2016-7-8'), /*Red Trigger*/
-									('2012-12-7'), /*The Cat Lady*/
-									('2016-2-15'), /*Downfall*/
-									('2014-3-11'), /*Titanfall*/
-									('2016-10-28'), /*Titanfall 2*/
-									('2014-9-9'), /*Destiny*/
-									('2017-9-6'), /*Destiny 2 console*/
-									('2017-10-24') /*Destiny 2 pc*/
+insert into releases(release_id, game_id, rating_id, publisher_id, region_id, dates) values  
+									(1, 1, 5, 1, 1, '2013-12-13'), /*'7 Days to die' computer*/
+									(2, 1, 5, 1, 1, '2016-1-6'), /*'7 Days to die' console*/
+									(3, 2, 5, 2, 1, '2015-10-15'), /*'Broforce' computer*/
+									(4, 2, 5, 2, 1, '2016-3-1'), /*'Broforce' console*/
+									(5, 3, 5, 3, 1, '2011-9-28'), /*The Binding of Isaac*/
+									(6, 4, 4, 4, 1, '2013-5-30'), /*Cloudberry Kingdom*/
+									(7, 5, 3, 5, 1, '2015-4-9'), /*I am Bread*/
+									(8, 6, 5, 6, 1, '2007-10-10'), /*Team Fortress 2*/
+									(9, 7, 2, 7, 1, '2015-5-5'), /*Tabletop Simulator*/
+									(10, 8, 4, 8, 1, '2011-1-25'), /*Magicka*/
+									(11, 9, 2, 9, 1, '2015-6-7'), /*Rocket League PC PS4*/
+									(12, 9, 2, 9, 1, '2016-2-17'), /*Rocket League X1*/
+									(13, 10, 2, 10, 5, '2006-9-15'), /*The Ship EU*/
+									(14, 10, 2, 10, 2, '2007-2-15'), /*The Ship NA*/
+									(15, 11, 3, 11, 2, '2010-3-25'), /*Blur NA*/
+									(16, 11, 5, 11, 5, '2010-3-28'), /*Blur EU*/
+									(17, 12, 5, 12, 1, '2006-11-7'), /*Gears of War*/
+									(18, 13, 5, 12, 1, '2001-11-15'), /*Halo: Combat Evolved*/
+									(19, 14, 2, 6, 1, '2006-11-29'), /*Garry's Mod */
+									(20, 15, 5, 6, 1, '2008-11-17'), /* Left 4 Dead*/
+									(21, 16, 5, 12, 1, '2004-11-9'), /*Halo 2 Xbox release*/ 
+									(22, 16, 4, 12, 1, '2007-5-31'), /*Halo 2 PC release*/
+									(23, 17, 2, 13, 1, '2017-3-23'), /*PlayerUnknown's Battlegrounds PC */
+									(24, 17, 3, 13, 1, NULL), /*PlayerUnknown's Battlegrounds Console*/
+									(25, 18, 2, 14, 1, '2013-12-19'), /*The Stanley Parabol*/
+									(26, 19, 3, 15, 1, '2012-9-14'),/*FTL: Faster Than Light PC*/
+									(27, 19, 3, 15, 1, '2014-4-3'),/*FTL: Faster Than Light IOS*/
+									(28, 20, 5, 16, 1, '2011-4-8'),/*Dino D-Day*/
+									(29, 21, 4, 17, 1, '2013-4-23'),/* Don't Starve*/
+									(30, 22, 5, 18, 1, '2016-3-13'),/*Doom PC Consoles*/
+									(31, 22, 5, 18, 1, '2017-11-10'),/*Doom Switch*/
+									(32, 23, 5, 12, 1, '2013-6-5'), /* State of Decay*/
+									(33, 24, 3, 19, 1, '2010-10-20'), /*Super Meat Boy*/
+									(34, 25, 5, 20, 1, '2012-8-1'), /*Deadlight xbox*/
+									(35, 25, 5, 20, 1, '2012-10-25'), /*Deadlight PC*/
+									(36, 25, 5, 20, 1, '2016-6-21'), /*Deadlight the rest*/
+									(37, 26, 2, 21, 1, '1987-12-17'), /*Rockman NES*/
+									(38, 27, 2, 25, 10, '1986-2-21'), /*Legend of Zeld NES Japanese*/
+									(39, 27, 2, 26, 2, '1986-8-22'), /*Legend of Zeld NES American*/
+									(40, 28, 2, 27, 1, '1989-8-15'), /*Where in Time is Carmen Sandiego? NES*/
+									(41, 29, 2, 28, 1, '1991-3-29'), /*Shining in the darkness Sega*/
+									(42, 31, 4, 29, 1, '1991-4-26'), /*Langrisser*/
+									(43, 32, 2, 25, 10, '1985-9-13'), /*Super Mario Brothers NES JP*/
+									(44, 32, 2, 26, 2, '1985-10-18'),/*Super Mario Brothers NES US*/
+									(45, 33, 2, 21, 1, '1993-12-17'), /*Mega Man X SNES*/
+									(46, 34, 4, 31, 10, '1997-1-31'), /*Final Fantasy VII PS1 JP*/
+									(47, 34, 4, 32, 5, '1997-11-17'), /*Final Fantasy VII PS1 EU*/
+									(48, 34, 4, 30, 2, '1997-9-7'), /*Final Fantasy VII PS1 US*/
+									(49, 35, 4, 33, 1, '2000-7-7'), /*Final Fantasy IX PS1*/
+									(50, 36, 4, 33, 1, '2002-5-16'), /*Final Fantasy XI PS2 and PC*/
+									(51, 37, 4, 34, 1, '2013-8-24'), /*Final Fantasy XIV PS3 PS4 PC*/
+									(52, 38, 5, 35, 10, '2015-3-15'), /*Senran Kagura: Estival Versus PS4 JP*/
+									(53, 39, 4, 31, 1, '1997-8-15'), /*Time Crisis PS1*/
+									(54, 40, 5, 36, 1, '2007-10-26'), /*The Witcher PC*/
+									(55, 41, 5, 37, 1, '2011-5-17'), /*The Witcher 2: Assassins of Kings PC + xbox360*/
+									(56, 42, 5, 38, 1, '2015-5-19'), /*The Witcher 3: Wild Hunt PC PS4*/
+									(57, 43, 2, 27, 1, '1998-6-1'), /*Quest 64 N64*/
+									(58, 44, 4, 27, 1, '2005-9-22'), /*Suikoden Tatics PS2*/
+									(59, 45, 4, 27, 1, '2006-2-23'), /*Suikoden V PS2*/
+									(60, 46, 4, 27, 1, '2004-8-19'), /*Suikoden IV PS2*/
+									(61, 47, 4, 27, 1, '2002-7-11'), /*Suikoden III PS2*/
+									(62, 48, 4, 27, 1, '1998-12-17'), /*Suikoden II PS1*/
+									(63, 49, 4, 27, 1, '1995-12-15'), /*Suikoden PS1*/
+									(64, 50, 4, 39, 1, '2002-9-23'), /*Summoner 2 PS2 GameCube*/
+									(65, 51, 4, 39, 1, '2000-10-24'), /*Summoner PS2 PC*/
+									(66, 52, 4, 40, 1, '2005-3-24'), /*Wild Arms 4 PS2*/
+									(67, 53, 4, 4, 1, '2002-3-14'), /*Wild Arms 3 PS2*/
+									(68, 54, 2, 31, 1, '1999-9-2'), /*Wild Arms 2 PS1*/
+									(69, 55, 2, 4, 1, '1996-12-20'), /*Wild Arms PS1*/
+									(70, 56, 4, 38, 1, '2013-10-10'), /*Tales of Symphonia Chronicales PS3*/
+									(71, 57, 4, 41, 1, '2013-10-10'), /*Fairy Fencer F PS3*/
+									(72, 58, 4, 42, 1, '2011-8-18'), /*HyperDimension Neptunia mk2 PS3 Playstation Vita*/
+									(73, 59, 4, 24, 1, '2004-10-26'), /*Bards Tale PS2*/
+									(74, 60, 5, 27, 1, '2008-6-12'), /*Metal Gear Solid 4:Guns of the Patriots PS3*/
+									(75, 61, 4, 42, 1, '2008-9-25'), /*Cross Edge PS3*/
+									(76, 62, 3, 21, 1, '1989-7-18'), /*Willow NES*/
+									(77, 63, 2, 28, 1, '1992-12-17'), /*World of Illusion Starring Mickey Mouse and Donald Duck Sega*/
+									(78, 64, 4, 43, 1, '1990-11-10'), /*Silver Surfer NES*/
+									(79, 65, 4, 42, 1, '2010-8-19'), /*HyperDimension Neptunia V PS4*/
+									(80, 66, 3, 44, 1, '2007-4-12'), /*GrimGrimoire PS2*/
+									(81, 67, 4, 42, 1, '2009-10-1'), /*Trinity Universe PS3*/
+									(82, 68, 4, 41, 1, '2009-6-25'), /*Record of Agarest War Zero PS3 Xbox360*/
+									(83, 69, 4, 31, 1, '2010-7-8'), /*White Knight Chronicles  II PS3*/
+									(84, 70, 4, 31, 1, '2008-12-25'), /*White Knight Chronicles  PS3*/
+									(85, 71, 4, 42, 1, '2013-1-24'), /*The Guided Fate ParaDox PS3*/
+									(86, 72, 4, 42, 1, '2012-3-22'), /*Mugen Souls PS3*/
+									(87, 73, 4, 38, 1, '2015-3-26'), /*Sword Art Online: Lost Song PS4 PS3 PSVista*/
+									(88, 74, 4, 42, 1, '2013-4-25'), /*Mugen Souls Z PS3*/
+									(89, 75, 4, 45, 1, '2002-2-28'), /*XenoSaga PS2*/
+									(90, 76, 4, 33, 1, '2005-8-4'), /*Grandia III PS2*/
+									(91, 77, 4, 33, 1, '2000-8-3'), /*Grandia II PS2*/
+									(92, 78, 2, 33, 1, '1997-12-18'), /*Grandia PS1*/
+									(93, 79, 2, 28, 1, '1989-12-16'), /*Sword OF Vermilion Sega*/
+									(94, 80, 2, 46, 1, '1986-12-11'), /*Valis Sega*/
+									(95, 81, 2, 46, 1, '1989-6-23'), /*Valis II Sega*/
+									(96, 82, 2, 28, 1, '1990-9-7'), /*Valis III Sega*/
+									(97, 83, 4, 46, 1, '1992-2-14'), /*Traysia Sega*/
+									(98, 84, 3, 27, 10, '1993-8-6'), /*Rocket Knight Adventures Sega JP*/
+									(99, 84, 3, 27, 2, '1993-8-5'), /*Rocket Knight Adventures Sega US*/
+									(100, 84, 3, 27, 5, '1993-8-7'), /*Rocket Knight Adventures Sega EU*/
+									(101, 85, 4, 42, 1, '2003-1-30'), /*Disgaea: Hour of Darkness PS2*/
+									(102, 86, 3, 12, 2, '2014-10-7'), /*Project Spark NA*/
+									(103, 86, 3, 12, 3, '2014-10-9'), /*Project Spark AU*/
+									(104, 86, 3, 12, 5, '2014-10-10'), /*Project Spark EU*/
+									(105, 87, 5, 12, 2, '2014-10-28'), /*Sunset Overdrive NA*/ 
+									(106, 87, 5, 12, 3, '2014-10-30'), /*Sunset Overdrive AU*/ 
+									(107, 87, 5, 12, 5, '2014-10-31'), /*Sunset Overdrive EU*/ 
+									(108, 88, 5, 21, 2, '2006-8-8'), /*Dead Rising NA*/
+									(109, 88, 5, 21, 5, '2006-9-8'), /*Dead Rising EU*/
+									(110, 88, 5, 21, 3, '2006-9-14'), /*Dead Rising AU*/
+									(111, 88, 5, 21, 10, '2006-9-28'), /*Dead Rising JP*/
+									(112, 88, 5, 21, 1, '2016-9-13'), /*Dead Rising Rerelease ps4, X1, MWS*/
+									(113, 89, 4, 12, 1, '2004-9-14'), /*Fable*/
+									(114, 90, 5, 12, 2, '2008-8-21'), /*Fable 2 NA*/
+									(115, 90, 5, 12, 3, '2008-8-23'), /*Fable 2 AU*/
+									(116, 90, 5, 12, 5, '2008-8-24'), /*Fable 2 EU*/
+									(117, 91, 5, 12, 2, '2007-2-20'), /*Crackdown NA*/
+									(118, 91, 5, 12, 3, '2007-2-22'), /*Crackdown AU*/
+									(119, 91, 5, 12, 5, '2007-2-23'), /*Crackdown EU*/
+									(120, 92, 5, 12, 2, '2010-7-6'), /*Crackdown 2 NA*/
+									(121, 92, 5, 12, 3, '2010-7-8'), /*Crackdown 2 AU*/
+									(121, 92, 5, 12, 5, '2010-7-9'), /*Crackdown 2 EU*/
+									(122, 93, 2, 12, 1, '2010-12-8'), /*Doritos Crash Course*/
+									(123, 94, 4, 22, 1, '2016-7-8'), /*Red Trigger*/
+									(124, 95, 5, 23, 1, '2012-12-7'), /*The Cat Lady*/
+									(125, 96, 5, 23, 1, '2016-2-15'), /*Downfall*/
+									(126, 97, 5, 24, 1, '2014-3-11'), /*Titanfall*/
+									(127, 98, 5, 24, 1, '2016-10-28'), /*Titanfall 2*/
+									(128, 99, 4, 11, 1, '2014-9-9'), /*Destiny*/
+									(129, 100, 4, 11, 1, '2017-9-6'), /*Destiny 2 console*/
+									(130, 100, 4, 11, 1, '2017-10-24'), /*Destiny 2 pc*/
+									(131, 30, 2, 28, 1, '1993-10-1') /*Shining Force II Sega*/
 									;
 
 /* Data entry for ratings*/
-insert into ratings( age, name) values      (0, 'EC'),
-											(0, 'E'),
-											(10, 'E10'),
-											(13, 'T'),
-											(17, 'M'),
-											(18, 'A');
-
-/*Data entry for gameHasGenre */
-insert into gameHasGenre (game_id, genre_id) values (),
-													;
-
-/*Data entry for gameHasDeveloper*/
-insert into gameHasDeveloper
+insert into ratings(rating_id, age, name) values  (1, 0, 'EC'),
+											(2, 0, 'E'),
+											(3, 10, 'E10'),
+											(4, 13, 'T'),
+											(5, 17, 'M'),
+											(6, 18, 'A');
 
 /* Data entry for genre*/
 insert into genre(genre_id, name) values    (1, 'survival'),
@@ -354,8 +355,10 @@ insert into genre(genre_id, name) values    (1, 'survival'),
 											(21, 'MMORPG'),
 											(22, 'JRPG'),
 											(23, 'Puzzle'),
-											(24, 'action'),
-											(25, 'adventure')
+											(24, 'Dungeon'),
+											(25, 'Beat up'),
+											(26, 'Hack and Slash'),
+											(27, 'Horror')
 											;
 
 /* Data entry for region*/
@@ -363,14 +366,14 @@ insert into region(region_id, name) values  (1, 'WW'),
 											(2, 'NA'),
 											(3, 'AU'),
 											(4, 'AUS'),
-											(5, 'PAL'),
+											(5, 'EU'),
 											(6, 'SEA'),
 											(7, 'AS'),
 											(8, 'SA'),
 											(9, 'OC'),
 											(10, 'JP')
 											;
-
+ 
 /* Data entry for platform*/
 insert into platform(name) values   ('PC'),
 									('console');
@@ -378,23 +381,24 @@ insert into platform(name) values   ('PC'),
 /* Data entry for pc*/
 insert into pc (platform_id,store) values   (1, 'steam'),
 											(1, 'origin'),
-											(1, 'retail')
+											(1, 'retail'),
+											(1, 'windows store')
 											;
 
 /* Data entry for console*/
-insert into console(platform_id,generation) values  (2, 'xbox'),
-										(2, 'playstation'),
-										(2, 'nintendo'),
-										(2, 'Sega'),
-										(2, 'playstation 2'),
-										(2, 'playstation 3'),
-										(2, 'playstation 4'),
-										(2, 'Super Nintendo'),
-										(2, 'Nintendo 64'),
-										(2, 'xbox 360'),
-										(2, 'gamecube'),
-										(2,'playstation vita'),
-										(2, 'wii');
+insert into console(console_id, platform_id, generation) values  (1, 2, 'xbox'),
+										(2, 2, 'playstation'),
+										(3, 2, 'nintendo'),
+										(4, 2, 'Sega'),
+										(5, 2, 'playstation 2'),
+										(6, 2, 'playstation 3'),
+										(7, 2, 'playstation 4'),
+										(8, 2, 'Super Nintendo'),
+										(9, 2, 'Nintendo 64'),
+										(10, 2, 'xbox 360'),
+										(11, 2, 'gamecube'),
+										(12, 2,'playstation vita'),
+										(13, 2, 'wii');
 
 /* Data entry for publisher*/
 insert into publisher(publisher_id, name, country_founded, city_founded) values   (1, 'The Fun Pimps', 'US', 'Dallas'),/*'7 Days to die' */
@@ -434,83 +438,346 @@ insert into publisher(publisher_id, name, country_founded, city_founded) values 
 																	(35, 'MARVELOUS!','JP','Tokyo'), /*Senran Kagura: Estival Versus PS4*/
 																	(36, 'Atari','US','New York City'), /*The Witcher PC*/ 
 																	(37, 'CD Projekt','PL','Warsaw'), /*The Witcher 2: Assassins of Kings PC + xbox360*/
-																	('Bandai Namco','JP','Tokyo'), /*The Witcher 3: Wild Hunt PC PS4*/ /*Tales of Symphonia Chronicales PS3*/ /*Sword Art Online: Lost Song PS4 PS3 PSVista*/
-																	('THQ','US','Agorura Hills'), /*Summoner 2 PS2 GameCube*/ /*Summoner PS2 PC*/
-																	('Marvelous USA','US','Torrance'), /*Wild Arms 4 PS2*/
-																	('Compile Heart','JP','Tokyo'), /*Fairy Fencer F PS3*/ /*Record of Agarest War Zero PS3 Xbox360*/
-																	('Nippon Ichi Software','JP','Kakamigahara'), /*HyperDimension Neptunia mk2 PS3 Playstation Vita*/ /*Cross Edge PS3*/ /*HyperDimension Neptunia V PS4*/ /*Trinity Universe PS3*/  /*The Guided Fate ParaDox PS3*/ /*Mugen Souls PS3*/ /*Mugen Souls Z PS3*/ /*Disgaea: Hour of Darkness PS2*/
-																	('Arcadia Systems','US','Costa Mesa'), /*Silver Surfer NES*/
-																	('Koei Tecmo Games','JP','Yokohama'), /*GrimGrimoire PS2*/
-																	('Namco','JP','Tokyo'), /*XenoSaga PS2*/
-																	('Telenet Japan','JP','Tokyo'), /*Valis Sega*/ /*Valis II Sega*/ /*Traysia Sega*/
+																	(38, 'Bandai Namco','JP','Tokyo'), /*The Witcher 3: Wild Hunt PC PS4*/ /*Tales of Symphonia Chronicales PS3*/ /*Sword Art Online: Lost Song PS4 PS3 PSVista*/
+																	(39, 'THQ','US','Agorura Hills'), /*Summoner 2 PS2 GameCube*/ /*Summoner PS2 PC*/
+																	(40, 'Marvelous USA','US','Torrance'), /*Wild Arms 4 PS2*/
+																	(41, 'Compile Heart','JP','Tokyo'), /*Fairy Fencer F PS3*/ /*Record of Agarest War Zero PS3 Xbox360*/
+																	(42, 'Nippon Ichi Software','JP','Kakamigahara'), /*HyperDimension Neptunia mk2 PS3 Playstation Vita*/ /*Cross Edge PS3*/ /*HyperDimension Neptunia V PS4*/ /*Trinity Universe PS3*/  /*The Guided Fate ParaDox PS3*/ /*Mugen Souls PS3*/ /*Mugen Souls Z PS3*/ /*Disgaea: Hour of Darkness PS2*/
+																	(43, 'Arcadia Systems','US','Costa Mesa'), /*Silver Surfer NES*/
+																	(44, 'Koei Tecmo Games','JP','Yokohama'), /*GrimGrimoire PS2*/
+																	(45, 'Namco','JP','Tokyo'), /*XenoSaga PS2*/
+																	(46, 'Telenet Japan','JP','Tokyo') /*Valis Sega*/ /*Valis II Sega*/ /*Traysia Sega*/
 																	;
 																	
 
 /* Data entry for developer*/
-insert into developer(name, country_founded, city_founded) values   ('The Fun Pimps Entertainment LLC', 'US', 'Dallas'),/*'7 Days to die' */
-																	('Free Lives', 'ZA', 'Cape Town'), /*Broforce */
-																	('Edmund McMillen Florian Himsl', 'US','Santa Cruz'),/*The Binding of Isaac*/
-																	('Pwnee Studios', 'US' , 'New York'), /*Cloudberry Kingdom*/
-																	('Bossa Studios','GB','London'), /*I am Bread*/
-																	('Valve','US','Bellevue'), /*Team Fortress 2*/ /* Left 4 Dead*/
-																	('Berserk','US','Stuart'), /*Tabletop Simulator*/
-																	('Arrowhead Game Studios','SE','Stockholm'), /*Magicka*/
-																	('Psyonix','US','Satellite Beach'), /*Rocket League*/
-																	('Outright', 'GB', 'Edinburgh' ), /*The Ship*/
-																	('Bizarre Creations','GB','Liverpool'), /*blur*/
-																	('Epic Games','US','Cary'),/*Gears of War*/
-																	('Bungie','US','Chicago'), /*Halo: Combat Evolved*/ /*Halo 2 */ /*Destiny*/ /*Destiny 2*/
-																	('Facepunch Studios','GB','Walsall'), /*garry's mod*/
-																	('Bluehole studio','KR','YeokSam-Dong'), /*PlayerUnknown BattleGrounds*/
-																	('Galactic Cafe','',''), /* The Stanley Parable*/
-																	('Subset Games','CN','Shanghai'),/*FTL: Faster Than Light*/
-																	('800 North','US','Burbank'),/*Dino D-Day*/	
-																	('Digital','US','Millcreek'), /*Dino D-Day*/
-																	('Klei Entertainment','CA','Vancouver'),/* Don't Starve*/
-																	('id Software','US','Mesquite'), /*Doom*/
-																	('Undead Labs','US','Seattle'),	 /* State of Decay*/
-																	('Team Meat','US','Asheville'), /*super meat boy*/
-																	('Tequila','ES','Madrid'), /*Deadlight*/
-																	('SkyBox labs','CA','Burnaby'), /*Project Spark*/
-																	('Insomniac Games','US','Burbank'), /*Sunset Overdrive*/ 	
-																	('Capcom','JP','Chūō-ku'), /*Deadrising*/ /*rockman*/ /*Mega Man X SNES*/ /*Cross Edge PS3*/ /*Willow NES*/
-																	('Microsoft Studios','US','Redmond'), /*Fable*/
-																	('Lionhead Studios','GB','London')/*Fable 2*/
-																	('Realtime','SCT','Dundee'),  /*Crackdown*/
-																	('Ruffian Games','SCT','Dundee'), /*Crackdown 2*/
-																	('Wanako Games','CL','Santiago'), /*Doritos Crash Course*/
-																	('Behaviour Interactive','CA','Quebec City'), /*Doritos Crash Course*/
-																	('Maxime Vézina','CA','Montreal'),/*Red Trigger*/	
-																	('Harvester Games','GB','Oxfordshire'), /*The Cat Lady*/ /*Downfall*/
-																	('Respawn Entertainment','US','Sherman Oaks'), /*Titanfall*/ /*Titanfall 2*/
-																	('Nintendo','JP','Kyoto'), /*Legend of Zelda JP*/ /*Super Mario Brothers NES JP*/
-																	('Nintendo','US','Seattle'), /*Legend of Zelda US*/ /*Super Mario Brothers NES US*/
-																	('Borderbund','US','Novato'), /*Where in Time is Carmen Sandiego? NES*/
-																	('Camelot Software Planing','JP','Tokyo'), /*Shining in the darkness Sega*/
-																	('Masaya','JP','Tokyo'), /*Langrisser*/
-																	('Squaresoft','JP','Tokyo'), /*Final Fantasy VII PS1 JP*/ /*Final Fantasy IX PS1*/ /*Final Fantasy XI PS2 and PC*/
-																	('Squaresoft','US','El Segundo'), /*Final Fantasy VII PS1 US*/
-																	('Squaresoft','GB','London'), /*Final Fantasy VII PS1 EN*/
-																	('Square Enix','JP','Tokyo'),/*Final Fantasy XIV PS3 PS4 PC*/
-																	('Tamsoft','JP','Tokyo'), /*Senran Kagura: Estival Versus PS4*/
-																	('Namco','JP','Tokyo'), /*Time Crisis PS1*/
-																	('CD Projekt','PL','Warsaw'), /*The Witcher PC*/ /*The Witcher 2: Assassins of Kings PC + xbox360*/
-																	('Bandai Namco','JP','Tokyo'), /*The Witcher 3: Wild Hunt PC PS4*/ /*Tales of Symphonia Chronicales PS3*/ /*XenoSaga PS2*/
-																	('Imangineer','JP','Tokyo'), /*Quest 64 N64*/
-																	('Konami','JP','Tokyo'), /*Suikoden Tatics PS2*/ /*Suikoden V PS2*/ /*Suikoden IV PS2*/ /*Suikoden III PS2*/ /*Suikoden II PS1*/ /*Suikoden PS1*/ /*Rocket Knight Adventures Sega*/ /*Rocket Knight Adventures Sega US*/ /*Rocket Knight Adventures Sega EU*/
-																	('Volition','US','Champaign'), /*Summoner 2 PS2 GameCube*/ /*Summoner PS2 PC*/
-																	('Media.Vision','JP','Tokyo'), /*Wild Arms 4 PS2*/ /*Wild Arms 3 PS2*/ /*Wild Arms 2 PS1*/ /*Wild Arms PS1*/
-																	('Compile Heart','JP','Tokyo'), /*Fairy Fencer F PS3*/ /*Mugen Souls PS3*/ /*Mugen Souls Z PS3*/
-																	('Idea Factory','JP','Tokyo'),/*HyperDimension Neptunia mk2 PS3 Playstation Vita*/ /*HyperDimension Neptunia V PS4*/ /*Trinity Universe PS3*/ /*Record of Agarest War Zero PS3 Xbox360*/
-																	('inXile Entertainment','US','Newport Beach'), /*Bards Tale PS2*/
-																	('Kojima Productions','JP','Tokyo'), /*Metal Gear Solid 4:Guns of the Patriots PS3*/
-																	('Sega','JP','Tokyo'),  /*World of Illusion Starring Mickey Mouse and Donald Duck Sega*/ /*Sword OF Vermilion Sega*/
-																	('Software Creation','GB','Manchester'), /*Silver Surfer NES*/
-																	('Vanillaware','JP','Osaka'), /*GrimGrimoire PS2*/
-																	('Level 5','JP','Fukuoka'), /*White Knight Chronicles  II PS3*/ /*White Knight Chronicles  PS3*/
-																	('Nippon Ichi Software','JP','Kakamigahara'), /*The Guided Fate ParaDox PS3*/ /*Disgaea: Hour of Darkness PS2*/
-																	('Artdink','JP','Tokyo'), /*Sword Art Online: Lost Song PS4 PS3 PSVista*/
-																	('Game Arts','JP','Tokyo'), /*Grandia III PS2*/ /*Grandia II PS2*/ /*Grandia PS1*/
-																	('Telenet Japan','JP','Tokyo'), /*Valis Sega*/ /*Valis II Sega*/ /*Valis III Sega*/ /*Traysia Sega*/
+insert into developer(developer_id, name, country_founded, city_founded) values   (1, 'The Fun Pimps Entertainment LLC', 'US', 'Dallas'),/*'7 Days to die' */
+																	(2, 'Free Lives', 'ZA', 'Cape Town'), /*Broforce */
+																	(3, 'Edmund McMillen Florian Himsl', 'US','Santa Cruz'),/*The Binding of Isaac*/
+																	(4, 'Pwnee Studios', 'US' , 'New York'), /*Cloudberry Kingdom*/
+																	(5, 'Bossa Studios','GB','London'), /*I am Bread*/
+																	(6, 'Valve','US','Bellevue'), /*Team Fortress 2*/ /* Left 4 Dead*/
+																	(7, 'Berserk','US','Stuart'), /*Tabletop Simulator*/
+																	(8, 'Arrowhead Game Studios','SE','Stockholm'), /*Magicka*/
+																	(9, 'Psyonix','US','Satellite Beach'), /*Rocket League*/
+																	(10, 'Outright', 'GB', 'Edinburgh' ), /*The Ship*/
+																	(11, 'Bizarre Creations','GB','Liverpool'), /*blur*/
+																	(12, 'Epic Games','US','Cary'),/*Gears of War*/
+																	(13, 'Bungie','US','Chicago'), /*Halo: Combat Evolved*/ /*Halo 2 */ /*Destiny*/ /*Destiny 2*/
+																	(14, 'Facepunch Studios','GB','Walsall'), /*garry's mod*/
+																	(15, 'Bluehole studio','KR','YeokSam-Dong'), /*PlayerUnknown BattleGrounds*/
+																	(16, 'Galactic Cafe','GB', NULL), /* The Stanley Parable*/
+																	(17, 'Subset Games','CN','Shanghai'),/*FTL: Faster Than Light*/
+																	(18, '800 North','US','Burbank'),/*Dino D-Day*/	
+																	(19, 'Digital','US','Millcreek'), /*Dino D-Day*/
+																	(20, 'Klei Entertainment','CA','Vancouver'),/* Don't Starve*/
+																	(21, 'id Software','US','Mesquite'), /*Doom*/
+																	(22, 'Undead Labs','US','Seattle'),	 /* State of Decay*/
+																	(23, 'Team Meat','US','Asheville'), /*super meat boy*/
+																	(24, 'Tequila','ES','Madrid'), /*Deadlight*/
+																	(25, 'SkyBox labs','CA','Burnaby'), /*Project Spark*/
+																	(26, 'Insomniac Games','US','Burbank'), /*Sunset Overdrive*/ 	
+																	(27, 'Capcom','JP','Chūō-ku'), /*Deadrising*/ /*rockman*/ /*Mega Man X SNES*/ /*Cross Edge PS3*/ /*Willow NES*/
+																	(28, 'Microsoft Studios','US','Redmond'), /*Fable*/
+																	(29, 'Lionhead Studios','GB','London')/*Fable 2*/
+																	(30, 'Realtime','SCT','Dundee'),  /*Crackdown*/
+																	(31, 'Ruffian Games','SCT','Dundee'), /*Crackdown 2*/
+																	(32, 'Wanako Games','CL','Santiago'), /*Doritos Crash Course*/
+																	(33, 'Behaviour Interactive','CA','Quebec City'), /*Doritos Crash Course*/
+																	(34, 'Maxime Vézina','CA','Montreal'),/*Red Trigger*/	
+																	(35, 'Harvester Games','GB','Oxfordshire'), /*The Cat Lady*/ /*Downfall*/
+																	(36, 'Respawn Entertainment','US','Sherman Oaks'), /*Titanfall*/ /*Titanfall 2*/
+																	(37, 'Nintendo','JP','Kyoto'), /*Legend of Zelda JP*/ /*Super Mario Brothers NES JP*/
+																	(38, 'Nintendo','US','Seattle'), /*Legend of Zelda US*/ /*Super Mario Brothers NES US*/
+																	(39, 'Borderbund','US','Novato'), /*Where in Time is Carmen Sandiego? NES*/
+																	(40, 'Camelot Software Planing','JP','Tokyo'), /*Shining in the darkness Sega*/
+																	(41, 'Masaya','JP','Tokyo'), /*Langrisser*/
+																	(42, 'Squaresoft','JP','Tokyo'), /*Final Fantasy VII PS1 JP*/ /*Final Fantasy IX PS1*/ /*Final Fantasy XI PS2 and PC*/
+																	(43, 'Squaresoft','US','El Segundo'), /*Final Fantasy VII PS1 US*/
+																	(44, 'Squaresoft','GB','London'), /*Final Fantasy VII PS1 EN*/
+																	(45, 'Square Enix','JP','Tokyo'),/*Final Fantasy XIV PS3 PS4 PC*/
+																	(46, 'Tamsoft','JP','Tokyo'), /*Senran Kagura: Estival Versus PS4*/
+																	(47, 'Namco','JP','Tokyo'), /*Time Crisis PS1*/
+																	(48, 'CD Projekt','PL','Warsaw'), /*The Witcher PC*/ /*The Witcher 2: Assassins of Kings PC + xbox360*/
+																	(49, 'Bandai Namco','JP','Tokyo'), /*The Witcher 3: Wild Hunt PC PS4*/ /*Tales of Symphonia Chronicales PS3*/ /*XenoSaga PS2*/
+																	(50, 'Imangineer','JP','Tokyo'), /*Quest 64 N64*/
+																	(51, 'Konami','JP','Tokyo'), /*Suikoden Tatics PS2*/ /*Suikoden V PS2*/ /*Suikoden IV PS2*/ /*Suikoden III PS2*/ /*Suikoden II PS1*/ /*Suikoden PS1*/ /*Rocket Knight Adventures Sega*/ /*Rocket Knight Adventures Sega US*/ /*Rocket Knight Adventures Sega EU*/
+																	(52, 'Volition','US','Champaign'), /*Summoner 2 PS2 GameCube*/ /*Summoner PS2 PC*/
+																	(53, 'Media.Vision','JP','Tokyo'), /*Wild Arms 4 PS2*/ /*Wild Arms 3 PS2*/ /*Wild Arms 2 PS1*/ /*Wild Arms PS1*/
+																	(54, 'Compile Heart','JP','Tokyo'), /*Fairy Fencer F PS3*/ /*Mugen Souls PS3*/ /*Mugen Souls Z PS3*/
+																	(55, 'Idea Factory','JP','Tokyo'),/*HyperDimension Neptunia mk2 PS3 Playstation Vita*/ /*HyperDimension Neptunia V PS4*/ /*Trinity Universe PS3*/ /*Record of Agarest War Zero PS3 Xbox360*/
+																	(56, 'inXile Entertainment','US','Newport Beach'), /*Bards Tale PS2*/
+																	(57, 'Kojima Productions','JP','Tokyo'), /*Metal Gear Solid 4:Guns of the Patriots PS3*/
+																	(58, 'Sega','JP','Tokyo'),  /*World of Illusion Starring Mickey Mouse and Donald Duck Sega*/ /*Sword OF Vermilion Sega*/
+																	(59, 'Software Creation','GB','Manchester'), /*Silver Surfer NES*/
+																	(60, 'Vanillaware','JP','Osaka'), /*GrimGrimoire PS2*/
+																	(61, 'Level 5','JP','Fukuoka'), /*White Knight Chronicles  II PS3*/ /*White Knight Chronicles  PS3*/
+																	(62, 'Nippon Ichi Software','JP','Kakamigahara'), /*The Guided Fate ParaDox PS3*/ /*Disgaea: Hour of Darkness PS2*/
+																	(63, 'Artdink','JP','Tokyo'), /*Sword Art Online: Lost Song PS4 PS3 PSVista*/
+																	(64, 'Game Arts','JP','Tokyo'), /*Grandia III PS2*/ /*Grandia II PS2*/ /*Grandia PS1*/
+																	(65, 'Telenet Japan','JP','Tokyo') /*Valis Sega*/ /*Valis II Sega*/ /*Valis III Sega*/ /*Traysia Sega*/
 																	;
 																	
+/*Data entry for gameHasGenre */
+insert into gameHasGenre (game_id, genre_id) values (1, 1),
+													(1, 2),
+													(2, 4),
+													(2, 5),
+													(3, 4),
+													(3, 6),
+													(4, 5),
+													(4, 7),
+													(5, 8),
+													(5, 9),
+													(6, 10),
+													(6, 11),
+													(7, 9),
+													(7, 12),
+													(8, 4),
+													(8, 8),
+													(9, 13),
+													(9 ,14),
+													(10, 4),
+													(10, 15),
+													(11, 13),
+													(12, 16),
+													(13, 10),
+													(14, 17),
+													(15, 2),
+													(15, 10),
+													(16, 10),
+													(17, 1),
+													(17, 11),
+													(18, 8),
+													(19, 5),
+													(19, 18),
+													(20, 4),
+													(20, 10),
+													(21, 1),
+													(21, 19),
+													(22, 4),
+													(22, 10),
+													(23, 1),
+													(23, 2),
+													(24, 5),
+													(24, 7),
+													(25, 2),
+													(25, 4),
+													(26, 4),
+													(26, 19),
+													(27, 4),
+													(27, 19),
+													(28, 18),
+													(29, 24),
+													(30, 18),
+													(30, 20),
+													(31, 18),
+													(31, 20),
+													(32, 5),
+													(32, 7),
+													(33, 4),
+													(33, 7),
+													(34, 20),
+													(35, 20),
+													(36, 21),
+													(37, 21),
+													(38, 25),
+													(39, 11),
+													(40, 4),
+													(40, 20),
+													(41, 4),
+													(41, 20),
+													(42, 4),
+													(42, 20),
+													(43, 20),
+													(44, 18),
+													(44, 20),
+													(45, 20),
+													(46, 20),
+													(47, 20),
+													(48, 20),
+													(49, 20),
+													(50, 4),
+													(50, 20),
+													(51, 4),
+													(51, 20),
+													(52, 20),
+													(53, 20),
+													(54, 20),
+													(55, 20),
+													(56, 20),
+													(57, 20),
+													(58, 20),
+													(59, 20),
+													(60, 4),
+													(60, 15),
+													(61, 18),
+													(61, 20),
+													(62, 7),
+													(62, 11),
+													(63, 7),
+													(64, 11),
+													(65, 20),
+													(66, 18),
+													(67, 20),
+													(68, 18),
+													(68, 20),
+													(69, 20),
+													(70, 20),
+													(71, 6),
+													(71, 20),
+													(72, 20),
+													(73, 4),
+													(73, 20),
+													(74, 19),
+													(74, 20),
+													(75, 20),
+													(76, 20),
+													(77, 20),
+													(78, 20),
+													(79, 4),
+													(79, 20),
+													(80, 7),
+													(80, 20),
+													(81, 7),
+													(81, 26),
+													(82, 7),
+													(82, 26),
+													(83, 20),
+													(84, 7),
+													(85, 18),
+													(85, 20),
+													(86, 17),
+													(87, 4),
+													(87, 16),
+													(88, 1),
+													(88, 27),
+													(89, 20),
+													(89, 4),
+													(90, 20),
+													(90, 4),
+													(91, 4),
+													(91, 16),
+													(92, 4),
+													(92, 16),
+													(93, 7),
+													(94, 10),
+													(94, 23),
+													(95, 27),
+													(96, 27),
+													(97, 10),
+													(98, 10),
+													(99, 10),
+													(99, 20),
+													(100, 10),
+													(100, 20)
+													;
+
+/*Data entry for gameHasDeveloper*/
+insert into gameHasDeveloper (game_id, developer_id) values (1, 1),
+													(2, 2),
+													(3, 3),
+													(4, 4),
+													(5, 5),
+													(6, 6),
+													(7, 7),
+													(8, 8),
+													(9 ,9),
+													(10, 10),
+													(11, 11),
+													(12, 12),
+													(13, 13),
+													(14, 14),
+													(15, 6),
+													(16, 13),
+													(17, 15),
+													(18, 16),
+													(19, 17),
+													(20, 18),
+													(20, 19),
+													(21, 20),
+													(22, 21),
+													(23, 22),
+													(24, 23),
+													(25, 24),
+													(26, 27)
+													(27, 37),
+													(27, 38),
+													(28, 39),
+													(29, 40),
+													(30, 40),
+													(31, 41),
+													(32, 37),
+													(32, 38),
+													(33, 27),
+													(34, 42),
+													(34, 43),
+													(34, 44),
+													(35, 42),
+													(36, 42),
+													(37, 45),
+													(38, 46),
+													(39, 47),
+													(40, 48),
+													(41, 48),
+													(42, 49),
+													(43, 50),
+													(44, 51),
+													(45, 51),
+													(46, 51),
+													(47, 51),
+													(48, 51),
+													(49, 51),
+													(50, 52),
+													(51, 52),
+													(52, 53),
+													(53, 53),
+													(54, 53),
+													(55, 53),
+													(56, 49),
+													(57, 54),
+													(58, 55),
+													(59, 56),
+													(60, 57),
+													(61, 27),
+													(62, 27),
+													(63, 58),
+													(64, 59),
+													(65, 55),
+													(66, 60),
+													(67, 55),
+													(68, 55),
+													(69, 61),
+													(70, 61),
+													(71, 62),
+													(72, 54),
+													(73, 63),
+													(74, 54),
+													(75, 49),
+													(76, 64),
+													(77, 64),
+													(78, 64),
+													(79, 58),
+													(80, 65),
+													(81, 65),
+													(82, 65),
+													(83, 65),
+													(84, 51),
+													(85, 62),
+													(86, 25),
+													(87, 26),
+													(88, 27),
+													(89, 28),
+													(90, 29),
+													(91, 30),
+													(92, 31),
+													(93, 32),
+													(93, 33),
+													(94, 34),
+													(95, 35),
+													(96, 35),
+													(97, 36),
+													(98, 36),
+													(99, 13),
+													(100, 13)
+													;
