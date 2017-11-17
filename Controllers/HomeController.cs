@@ -38,7 +38,7 @@ namespace vgsearch.Controllers
 
         public async Task<IActionResult> AdvancedSearch()
         {
-            ViewData["Regions"] = await _context.Genres.ToListAsync();
+            ViewData["Regions"] = await _context.Regions.ToListAsync();
             ViewData["Genres"] = await _context.Genres.ToListAsync();
             return View();
         }
