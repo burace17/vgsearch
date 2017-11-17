@@ -1,4 +1,5 @@
 <!--
+TODO: Remove this comment when this page is finished.
 
 Advanced Search Form:
 
@@ -12,7 +13,14 @@ Console or PC? (dropdown)
 PC Store (textbox)
 Console Name (textbox)
 
+All of the regions and genres we support are available in the ViewData dictionary
+ViewData["Regions"] gives a list of region objects, as does ViewData["Genres"]
+(basically just loop through these and populate your dropdown)
 -->
+
+@{
+    ViewData["Title"] = "Advanced Search";
+}
 
 <form action="/Search/AdvancedSearch">
 

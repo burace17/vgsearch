@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using vgsearch.Models;
 
 namespace vgsearch.Controllers
@@ -30,6 +33,13 @@ namespace vgsearch.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
+            return View();
+        }
+
+        public async Task<IActionResult> AdvancedSearch()
+        {
+            ViewData["Regions"] = await _context.Genres.ToListAsync();
+            ViewData["Genres"] = await _context.Genres.ToListAsync();
             return View();
         }
 
