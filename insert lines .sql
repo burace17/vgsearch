@@ -9,63 +9,69 @@ drop table releases cascade;
 drop table pc cascade;
 drop table console cascade;
 drop table gameHasGenre cascade;
-drop table gameHasPublisher cascade;
+drop table gameHasDeveloper cascade;
+drop table platISApc cascade;
+drop table platISAconsole cascade;
+drop table releaseHasPlatform cascade;
+
 
 CREATE TABLE game(game_id SERIAL PRIMARY KEY,
 				  name VARCHAR(255) NOT NULL,
 				  comments VARCHAR(255));
 				  
-GRANT SELECT,INSERT,UPDATE,DELETE ON game TO vgsearch;
+/*GRANT SELECT,INSERT,UPDATE,DELETE ON game TO vgsearch; */
 
-create table ratings(rating_id SERIAL PRIMARY KEY,
+create table ratings(rating_id INT PRIMARY KEY,
 				age INT NOT NULL,
 				name VARCHAR(255) NOT NULL);
 					
-create table genre(genre_id SERIAL PRIMARY KEY,
+create table genre(genre_id INT PRIMARY KEY,
 				   name VARCHAR(255) NOT NULL);
 				   
-create table region(region_id SERIAL PRIMARY KEY,
+create table region(region_id INT PRIMARY KEY,
 				    name VARCHAR(255) NOT NULL);
-				   
-create table platform(platform_id SERIAL PRIMARY KEY,
-				      name VARCHAR(255) NOT NULL);
 
-create table publisher(publisher_id SERIAL PRIMARY KEY,
+create table publisher(publisher_id INT PRIMARY KEY,
 					name VARCHAR(255) NOT NULL,
 					country_founded VARCHAR(255) NOT NULL,
 					city_founded VARCHAR(255));
 
-create table developer(developer_id SERIAL PRIMARY KEY,
+create table developer(developer_id INT PRIMARY KEY,
 						name VARCHAR(255) NOT NULL,
 						country_founded VARCHAR(255) NOT NULL,
 						city_founded VARCHAR(255));
-				  
-create table releases(release_id SERIAL PRIMARY KEY,
+				  				 
+
+create table platform(platform_id INT PRIMARY KEY,
+				      name VARCHAR(255) NOT NULL);
+					  
+create table platISApc(platform_id INT NOT NULL,
+					   pc_id INT NOT NULL,
+				      PRIMARY KEY (platform_id, pc_id));
+					  
+create table platISAconsole(platform_id INT NOT NULL,
+							console_id INT NOT NULL,
+							PRIMARY KEY (platform_id, console_id));
+				 
+create table pc(pc_id INT PRIMARY KEY,
+				OS VARCHAR(255) NOT NULL);
+				
+create table console(console_id INT PRIMARY KEY,
+				series VARCHAR(255) NOT NULL,
+				creator VARCHAR(255) NOT NULL);
+				
+create table releases(release_id INT PRIMARY KEY,
 				  game_id INT NOT NULL,
 				  rating_id INT NOT NULL,
 				  publisher_id INT NOT NULL,
 				  region_id INT NOT NULL,
-				  platform_id INT NOT NULL,
 				  FOREIGN KEY (game_id) REFERENCES game(game_id),
 				  FOREIGN KEY (rating_id) REFERENCES ratings (rating_id),
 				  FOREIGN KEY (publisher_id) REFERENCES publisher (publisher_id),
 				  FOREIGN KEY (region_id) REFERENCES region (region_id),
-				  FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
 				  dates date);
-				 
-
-					  
-create table pc(pc_id SERIAL PRIMARY KEY,
-		  		platform_id INT NOT NULL,
-				FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
-				store VARCHAR(255) NOT NULL);
-				
-create table console(console_id SERIAL PRIMARY KEY,
-                platform_id INT NOT NULL,
-				FOREIGN KEY (platform_id) REFERENCES platform (platform_id),
-				generation VARCHAR(255) NOT NULL);
-				
-
+				  
+				  
 create table gameHasGenre(
                         game_id INT NOT NULL,
                         genre_id INT NOT NULL,
@@ -80,6 +86,14 @@ create table gameHasDeveloper(
 				        PRIMARY KEY (game_id, developer_id),
 						FOREIGN KEY (game_id) REFERENCES game (game_id),
 						FOREIGN KEY (developer_id) REFERENCES developer(developer_id)
+						);
+
+create table releaseHasPlatform(
+                        release_id INT NOT NULL,
+                        platform_id INT NOT NULL,
+				        PRIMARY KEY (release_id, platform_id),
+						FOREIGN KEY (release_id) REFERENCES releases (release_id),
+						FOREIGN KEY (platform_id) REFERENCES platform(platform_id)
 						);
 
 
@@ -176,7 +190,7 @@ insert into game(game_id, name,comments) values  (1, '7 Days to Die', 'Fun game,
 												 (89, 'Fable','Greast console RPG'),
 												 (90, 'Fable 2','Solid second game, multiplayer is a good addition.'),
 												 (91, 'Crackdown','Is it a shooter or is it a platformer? yes'),
-												 (92, 'Crackdown 2','A departure from the first game.')
+												 (92, 'Crackdown 2','A departure from the first game.'),
 												 (93, 'Doritos Crash Course','Fun and slightly challenging'),
 												 (94, 'Red Trigger','Not bad at all, in fact its pretty good'),
 												 (95, 'The Cat Lady','Was not expecting this dark of a story.'),
@@ -187,6 +201,180 @@ insert into game(game_id, name,comments) values  (1, '7 Days to Die', 'Fun game,
 												 (100, 'Destiny 2','Story! Finally they added a story.')
 										;
 
+
+/* Data entry for ratings*/
+insert into ratings(rating_id, age, name) values  (1, 0, 'EC'),
+											(2, 0, 'E'),
+											(3, 10, 'E10'),
+											(4, 13, 'T'),
+											(5, 17, 'M'),
+											(6, 18, 'A');
+
+/* Data entry for genre*/
+insert into genre(genre_id, name) values    (1, 'survival'),
+											(2, 'zombie'), 
+											(3, 'open world'),
+											(4, 'action'),
+											(5, '2D'),
+											(6, 'rogue-like'),
+											(7, 'platformer'),
+											(8, 'comedy'),
+											(9, 'simulation'),
+											(10, 'first person shooter'),
+											(11, 'shooter'),
+											(12, 'Board Game'),
+											(13, 'Racing'),
+											(14, 'Sports'),
+											(15, 'Stealth'),
+											(16, 'third person shooter'),
+											(17, 'Sandbox'),
+											(18, 'Strategy'),
+											(19, 'Adventure'),
+											(20, 'RPG'),
+											(21, 'MMORPG'),
+											(22, 'JRPG'),
+											(23, 'Puzzle'),
+											(24, 'Dungeon'),
+											(25, 'Beat up'),
+											(26, 'Hack and Slash'),
+											(27, 'Horror')
+											;
+
+/* Data entry for region*/
+insert into region(region_id, name) values  (1, 'WW'),
+											(2, 'NA'),
+											(3, 'AU'),
+											(4, 'AUS'),
+											(5, 'EU'),
+											(6, 'SEA'),
+											(7, 'AS'),
+											(8, 'SA'),
+											(9, 'OC'),
+											(10, 'JP')
+											;
+ 
+/* Data entry for platform*/
+insert into platform(platform_id, name) values  (1, 'steam'),
+												(2, 'origin'),
+												(3, 'windows store'),
+												(4, 'Sega'),
+												(5, 'playstation'),
+												(6, 'playstation 2'),
+												(7, 'playstation 3'),
+												(8, 'playstation 4'),
+												(9, 'Super Nintendo'),
+												(10, 'Nintendo 64'),
+												(11, 'xbox'),
+												(12, 'xbox 360'),
+												(13, 'Xbox one'),
+												(14, 'gamecube'),
+												(15, 'playstation vita'),
+												(16,  'wii'),
+												(17, 'wii U'),
+												(18, 'Nintendo Switch'),
+												(19, 'Nintendo Entertainment System'),
+												(20, 'BattleNet')
+												;
+												
+insert into platISApc(platform_id, pc_id) values 			(1, 1),
+															(1, 2),
+															(1, 3),
+															(2, 1),
+															(2, 2),
+															(2, 3),
+															(3, 2),
+															(20, 1),
+															(20, 2),
+															(20, 3)
+															;
+															
+															
+insert into platISAconsole(platform_id, console_id) values  (4, 1),
+															(5, 2),
+															(6, 2),
+															(7, 2),
+															(8, 2),
+															(9, 3),
+															(10, 3),
+															(11, 4),
+															(12, 4),
+															(13, 4),
+															(14, 6),
+															(15, 2),
+															(16, 5),
+															(17, 5),
+															(18, 5),
+															(19, 3);
+															
+																														
+/* Data entry for pc*/
+insert into pc (pc_id, OS) values   (1, 'Linux'),
+									(2, 'Windows'),
+									(3, 'Macintosh');
+											
+
+/* Data entry for console*/
+insert into console(console_id, series, creator) values 
+										(1, 'Sega Genesis', 'Sega'),
+										(2, 'Playstation', 'Sony' ), 
+										(3, 'Nintendo','Nintendo' ),
+										(4, 'Xbox', 'Microsoft'),
+										(5, 'Wii', 'Nintendo'),
+										(6, 'Gamecube', 'Nintendo');
+										
+										
+										
+									
+/* Data entry for publisher*/
+insert into publisher(publisher_id, name, country_founded, city_founded) values   (1, 'The Fun Pimps', 'US', 'Dallas'),/*'7 Days to die' */
+																	(2, 'Developer Digital', 'US', 'Austin'), /*Broforce*/
+																	(3, 'Edmund McMillen', 'US','Asheville'), /*The Binding of Isaac*/
+																	(4, 'Ubisoft', 'FR', 'Carentoir'),/*Cloudberry Kingdom*/ /*Wild Arms 3 PS2*/ /*Wild Arms PS1*/
+																	(5, 'Bossa Studios','EN','London'), /*I am Bread*/
+																	(6, 'Valve','US','Bellevue'), /*Team Fortress 2*/ /*garry's mod*/ /* Left 4 Dead*/
+																	(7, 'Berserk','US','Stuart'), /*Tabletop Simulator*/
+																	(8, 'Paradox Interactive','SE','Stockholm'), /*Magicka*/
+																	(9, 'Psyonix','US','Satellite Beach'), /*Rocket League*/
+																	(10, 'Blazing Griffin','GB','Glasgow'), /* The Ship*/
+																	(11, 'Activision','US','Santa Monica'), /* Blur*/ /*Destiny*/ /*Destiny 2*/
+																	(12, 'Microsoft Studios','US','Redmond'), /*Gears of War*/ /*Halo: Combat Evolved */ /*Halo 2 */ /* State of Decay*//*Deadlight*/ /*Project Spark*/ /*Sunset Overdrive*/ /*Fable*/ /*Fable 2*/ /*Crackdown*/ /*Crackdown 2*/
+																	(13, 'Bluehole Studio','KR','YeokSam-Dong'), /*PlayerUnknown BattleGrounds*/
+																	(14, 'Galactic Cafe','',''), /* The Stanley Parable*/
+																	(15, 'Subset Games','CN','Shanghai'),/*FTL: Faster Than Light*/
+																	(16, '800 North','US','Burbank'),/*Dino D-Day*/	
+																	(17, 'Klei Entertainment','CA','Vancouver'), /* Don't Starve*/
+																	(18, 'Bethesda Softworks','US','Bethesda'), /*Doom*/
+																	(19, 'Team Meat','US','Asheville'), /*super meat boy*/
+																	(20, 'Deep Silver','DE','Germany'), /*Deadlight everything else*/
+																	(21, 'Capcom','JP','Chūō-ku'), /*Deadrising*/ /*rockman*/ /*Mega Man X SNES*/ /*Willow NES*/
+																	(22, 'Maxime Vézina','CA','Montreal'),/*Red Trigger*/	
+																	(23, 'Screen 7','GB','Oxfordshire'), /*The Cat Lady*/ /*Downfall*/
+																	(24, 'Electronic Arts','US','San Mateo'), /*Titanfall*/ /*Titanfall 2*/ /*Bards Tale PS2*/
+																	(25, 'Nintendo','JP','Kyoto'), /*Legend of Zelda JP*/ /*Super Mario Brothers NES JP*/
+																	(26, 'Nintendo','US','Seattle'), /*Legend of Zelda US*/ /*Super Mario Brothers NES US*/
+																	(27, 'Konami','JP','Tokyo'), /*Where in Time is Carmen Sandiego? NES*/ /*Quest 64 N64*/ /*Suikoden Tatics PS2*/ /*Suikoden V PS2*/ /*Suikoden IV PS2*/ /*Suikoden III PS2*/ /*Suikoden II PS1*/ /*Suikoden PS1*/ /*Metal Gear Solid 4:Guns of the Patriots PS3*/ /*Rocket Knight Adventures Sega JP*/ /*Rocket Knight Adventures Sega US*/ /*Rocket Knight Adventures Sega EU*/
+																	(28, 'Sega','JP','Tokyo'), /*Shining in the darkness Sega*/ /*World of Illusion Starring Mickey Mouse and Donald Duck Sega*/ /*Sword OF Vermilion Sega*/ /*Valis III Sega*/
+																	(29, 'Masaya','JP','Tokyo'), /*Langrisser*/
+																	(30, 'Sony Computer Entertainment','US','San Matel'), /*Final Fantasy VII PS1 US*/
+																	(31, 'Sony Computer Entertainment','JP','Tokyo'), /*Final Fantasy VII PS1 JP*/ /*Time Crisis PS1*/ /*Wild Arms 2 PS1*/ /*White Knight Chronicles  II PS3*/ /*White Knight Chronicles  PS3*/
+																	(32, 'Sony Computer Entertainment','GB','London'), /*Final Fantasy VII PS1 EN*/
+																	(33, 'Squaresoft','JP','Tokyo'), /*Final Fantasy IX PS1*/ /*Final Fantasy XI PS2 and PC*/ /*Grandia III PS2*/ /*Grandia II PS2*/ /*Grandia PS1*/
+																	(34, 'Square Enix','JP','Tokyo'),/*Final Fantasy XIV PS3 PS4 PC*/
+																	(35, 'MARVELOUS!','JP','Tokyo'), /*Senran Kagura: Estival Versus PS4*/
+																	(36, 'Atari','US','New York City'), /*The Witcher PC*/ 
+																	(37, 'CD Projekt','PL','Warsaw'), /*The Witcher 2: Assassins of Kings PC + xbox360*/
+																	(38, 'Bandai Namco','JP','Tokyo'), /*The Witcher 3: Wild Hunt PC PS4*/ /*Tales of Symphonia Chronicales PS3*/ /*Sword Art Online: Lost Song PS4 PS3 PSVista*/
+																	(39, 'THQ','US','Agorura Hills'), /*Summoner 2 PS2 GameCube*/ /*Summoner PS2 PC*/
+																	(40, 'Marvelous USA','US','Torrance'), /*Wild Arms 4 PS2*/
+																	(41, 'Compile Heart','JP','Tokyo'), /*Fairy Fencer F PS3*/ /*Record of Agarest War Zero PS3 Xbox360*/
+																	(42, 'Nippon Ichi Software','JP','Kakamigahara'), /*HyperDimension Neptunia mk2 PS3 Playstation Vita*/ /*Cross Edge PS3*/ /*HyperDimension Neptunia V PS4*/ /*Trinity Universe PS3*/  /*The Guided Fate ParaDox PS3*/ /*Mugen Souls PS3*/ /*Mugen Souls Z PS3*/ /*Disgaea: Hour of Darkness PS2*/
+																	(43, 'Arcadia Systems','US','Costa Mesa'), /*Silver Surfer NES*/
+																	(44, 'Koei Tecmo Games','JP','Yokohama'), /*GrimGrimoire PS2*/
+																	(45, 'Namco','JP','Tokyo'), /*XenoSaga PS2*/
+																	(46, 'Telenet Japan','JP','Tokyo') /*Valis Sega*/ /*Valis II Sega*/ /*Traysia Sega*/
+																	;
+																	
+																	
 /* Data entry for releases*/
 insert into releases(release_id, game_id, rating_id, publisher_id, region_id, dates) values  
 									(1, 1, 5, 1, 1, '2013-12-13'), /*'7 Days to die' computer*/
@@ -310,7 +498,7 @@ insert into releases(release_id, game_id, rating_id, publisher_id, region_id, da
 									(119, 91, 5, 12, 5, '2007-2-23'), /*Crackdown EU*/
 									(120, 92, 5, 12, 2, '2010-7-6'), /*Crackdown 2 NA*/
 									(121, 92, 5, 12, 3, '2010-7-8'), /*Crackdown 2 AU*/
-									(121, 92, 5, 12, 5, '2010-7-9'), /*Crackdown 2 EU*/
+									(132, 92, 5, 12, 5, '2010-7-9'), /*Crackdown 2 EU*/
 									(122, 93, 2, 12, 1, '2010-12-8'), /*Doritos Crash Course*/
 									(123, 94, 4, 22, 1, '2016-7-8'), /*Red Trigger*/
 									(124, 95, 5, 23, 1, '2012-12-7'), /*The Cat Lady*/
@@ -321,133 +509,229 @@ insert into releases(release_id, game_id, rating_id, publisher_id, region_id, da
 									(129, 100, 4, 11, 1, '2017-9-6'), /*Destiny 2 console*/
 									(130, 100, 4, 11, 1, '2017-10-24'), /*Destiny 2 pc*/
 									(131, 30, 2, 28, 1, '1993-10-1') /*Shining Force II Sega*/
-									;
+									;										
+										
+insert into releaseHasPlatform(release_id, platform_id) values  (1, 1),
+																(1, 2),
+																(1, 3),
+																(2, 8),
+																(2, 13),
+																(3, 1),
+																(3, 3), 
+																(4, 8),
+																(5, 1),
+																(6, 1),
+																(6, 7),
+																(6, 17),
+																(6, 12),
+																(7, 1),
+																(7, 8),
+																(7, 13),
+																(7, 2),
+																(8, 1),
+																(9, 1),
+																(10, 1),
+																(11, 8),
+																(11, 1),
+																(11, 2),
+																(12, 13),
+																(13, 1),
+																(13, 2),
+																(14, 1),
+																(14, 2),
+																(15, 12),
+																(15, 7),
+																(16, 12),
+																(16, 7),
+																(17, 3),
+																(17, 12),
+																(17, 13),
+																(18, 11),
+																(19, 1),
+																(20, 1),
+																(20, 12),
+																(21, 11),
+																(22, 3),
+																(23, 1),
+																(23, 2),
+																(24, 13),
+																(25, 1),
+																(26, 1),
+																(27, 3),
+																(28, 1),
+																(29, 1),
+																(29, 7),
+																(29, 8),
+																(29, 15),
+																(29, 17),
+																(29, 13),
+																(30, 1),
+																(30, 8),
+																(30, 13),
+																(31, 18),
+																(32, 12),
+																(32, 1),
+																(32, 13),
+																(33, 1),
+																(33, 2),
+																(33, 12),
+																(33, 8),
+																(33, 15),
+																(33, 17),
+																(33, 18),
+																(35, 1),
+																(34, 12),
+																(36, 13),
+																(36, 8),
+																(37, 19),
+																(38, 19),
+																(39, 19),
+																(40, 19),
+																(41, 4),
+																(42, 5),
+																(42, 6),
+																(43, 19),
+																(44, 19),
+																(45, 9),
+																(46, 5),
+																(47, 5),
+																(48, 5),
+																(49, 5),
+																(50, 6),
+																(50, 1),
+																(51, 7),
+																(51, 8),
+																(51, 1),
+																(52, 8),
+																(53, 5),
+																(54, 1),
+																(55, 1),
+																(55, 12),
+																(56, 1),
+																(56, 8),
+																(56, 13),
+																(57, 10),
+																(58, 6),
+																(59, 6),
+																(60, 6),
+																(61, 6),
+																(62, 5),
+																(63, 5),
+																(64, 6),
+																(64, 14),
+																(65, 6),
+																(65, 14),
+																(65, 1),
+																(66, 6),
+																(67, 6),
+																(68, 5),
+																(69, 5),
+																(70, 7),
+																(71, 7),
+																(71, 1),
+																(72, 7),
+																(72, 15),
+																(73, 6),
+																(73, 1),
+																(73, 11),
+																(74, 7),
+																(75, 7),
+																(76, 19),
+																(77, 4),
+																(78, 19),
+																(79, 8),
+																(80, 6),
+																(81, 7),
+																(82, 7),
+																(82, 12),
+																(83, 7),
+																(84, 7),
+																(85, 7),
+																(86, 7),
+																(87, 8),
+																(87, 7),
+																(87, 15),
+																(88, 7),
+																(89, 6),
+																(90, 6),
+																(91, 6),
+																(92, 5),
+																(93, 4),
+																(94, 4),
+																(95, 4),
+																(96, 4),
+																(97, 4),
+																(98, 4),
+																(99, 4),
+																(100, 4),
+																(101, 6),
+																(102, 3),
+																(102, 13),
+																(103, 3),
+																(103, 13),
+																(104, 3),
+																(104, 13),
+																(105, 13),
+																(106, 13),
+																(107, 13),
+																(108, 12),
+																(108, 16),
+																(108, 7),
+																(108, 8),
+																(108, 1),
+																(108, 13),
+																(109, 12),
+																(109, 16),
+																(109, 7),
+																(109, 8),
+																(109, 1),
+																(109, 13),
+																(110, 12),
+																(110, 16),
+																(110, 7),
+																(110, 8),
+																(110, 1),
+																(110, 13),
+																(111, 12),
+																(111, 16),
+																(111, 7),
+																(111, 8),
+																(111, 1),
+																(111, 13),
+																(112, 8),
+																(112, 13),
+																(113, 11),
+																(113, 12),
+																(113, 1),
+																(114, 12),
+																(115, 12),
+																(116, 12),
+																(117, 12),
+																(118, 12),
+																(119, 12),
+																(120, 12),
+																(121, 12),
+																(132, 12),
+																(122, 12),
+																(122, 3),
+																(123, 1),
+																(124, 1),
+																(125, 1),
+																(126, 12),
+																(126, 13),
+																(127, 8),
+																(127, 13),
+																(128, 12),
+																(128, 13),
+																(128, 7),
+																(128, 8),
+																(129, 8),
+																(129, 13),
+																(130, 20);
+																
 
-/* Data entry for ratings*/
-insert into ratings(rating_id, age, name) values  (1, 0, 'EC'),
-											(2, 0, 'E'),
-											(3, 10, 'E10'),
-											(4, 13, 'T'),
-											(5, 17, 'M'),
-											(6, 18, 'A');
 
-/* Data entry for genre*/
-insert into genre(genre_id, name) values    (1, 'survival'),
-											(2, 'zombie'), 
-											(3, 'open world'),
-											(4, 'action'),
-											(5, '2D'),
-											(6, 'rogue-like'),
-											(7, 'platformer'),
-											(8, 'comedy'),
-											(9, 'simulation'),
-											(10, 'first person shooter'),
-											(11, 'shooter'),
-											(12, 'Board Game'),
-											(13, 'Racing'),
-											(14, 'Sports'),
-											(15, 'Stealth'),
-											(16, 'third person shooter'),
-											(17, 'Sandbox'),
-											(18, 'Strategy'),
-											(19, 'Adventure'),
-											(20, 'RPG'),
-											(21, 'MMORPG'),
-											(22, 'JRPG'),
-											(23, 'Puzzle'),
-											(24, 'Dungeon'),
-											(25, 'Beat up'),
-											(26, 'Hack and Slash'),
-											(27, 'Horror')
-											;
-
-/* Data entry for region*/
-insert into region(region_id, name) values  (1, 'WW'),
-											(2, 'NA'),
-											(3, 'AU'),
-											(4, 'AUS'),
-											(5, 'EU'),
-											(6, 'SEA'),
-											(7, 'AS'),
-											(8, 'SA'),
-											(9, 'OC'),
-											(10, 'JP')
-											;
- 
-/* Data entry for platform*/
-insert into platform(name) values   ('PC'),
-									('console');
-
-/* Data entry for pc*/
-insert into pc (platform_id,store) values   (1, 'steam'),
-											(1, 'origin'),
-											(1, 'retail'),
-											(1, 'windows store')
-											;
-
-/* Data entry for console*/
-insert into console(console_id, platform_id, generation) values  (1, 2, 'xbox'),
-										(2, 2, 'playstation'),
-										(3, 2, 'nintendo'),
-										(4, 2, 'Sega'),
-										(5, 2, 'playstation 2'),
-										(6, 2, 'playstation 3'),
-										(7, 2, 'playstation 4'),
-										(8, 2, 'Super Nintendo'),
-										(9, 2, 'Nintendo 64'),
-										(10, 2, 'xbox 360'),
-										(11, 2, 'gamecube'),
-										(12, 2,'playstation vita'),
-										(13, 2, 'wii');
-
-/* Data entry for publisher*/
-insert into publisher(publisher_id, name, country_founded, city_founded) values   (1, 'The Fun Pimps', 'US', 'Dallas'),/*'7 Days to die' */
-																	(2, 'Developer Digital', 'US', 'Austin'), /*Broforce*/
-																	(3, 'Edmund McMillen', 'US','Asheville'), /*The Binding of Isaac*/
-																	(4, 'Ubisoft', 'FR', 'Carentoir'),/*Cloudberry Kingdom*/ /*Wild Arms 3 PS2*/ /*Wild Arms PS1*/
-																	(5, 'Bossa Studios','EN','London'), /*I am Bread*/
-																	(6, 'Valve','US','Bellevue'), /*Team Fortress 2*/ /*garry's mod*/ /* Left 4 Dead*/
-																	(7, 'Berserk','US','Stuart'), /*Tabletop Simulator*/
-																	(8, 'Paradox Interactive','SE','Stockholm'), /*Magicka*/
-																	(9, 'Psyonix','US','Satellite Beach'), /*Rocket League*/
-																	(10, 'Blazing Griffin','GB','Glasgow'), /* The Ship*/
-																	(11, 'Activision','US','Santa Monica'), /* Blur*/ /*Destiny*/ /*Destiny 2*/
-																	(12, 'Microsoft Studios','US','Redmond'), /*Gears of War*/ /*Halo: Combat Evolved */ /*Halo 2 */ /* State of Decay*//*Deadlight*/ /*Project Spark*/ /*Sunset Overdrive*/ /*Fable*/ /*Fable 2*/ /*Crackdown*/ /*Crackdown 2*/
-																	(13, 'Bluehole Studio','KR','YeokSam-Dong'), /*PlayerUnknown BattleGrounds*/
-																	(14, 'Galactic Cafe','',''), /* The Stanley Parable*/
-																	(15, 'Subset Games','CN','Shanghai'),/*FTL: Faster Than Light*/
-																	(16, '800 North','US','Burbank'),/*Dino D-Day*/	
-																	(17, 'Klei Entertainment','CA','Vancouver'), /* Don't Starve*/
-																	(18, 'Bethesda Softworks','US','Bethesda'), /*Doom*/
-																	(19, 'Team Meat','US','Asheville'), /*super meat boy*/
-																	(20, 'Deep Silver','DE','Germany'), /*Deadlight everything else*/
-																	(21, 'Capcom','JP','Chūō-ku'), /*Deadrising*/ /*rockman*/ /*Mega Man X SNES*/ /*Willow NES*/
-																	(22, 'Maxime Vézina','CA','Montreal'),/*Red Trigger*/	
-																	(23, 'Screen 7','GB','Oxfordshire'), /*The Cat Lady*/ /*Downfall*/
-																	(24, 'Electronic Arts','US','San Mateo') /*Titanfall*/ /*Titanfall 2*/ /*Bards Tale PS2*/
-																	(25, 'Nintendo','JP','Kyoto'), /*Legend of Zelda JP*/ /*Super Mario Brothers NES JP*/
-																	(26, 'Nintendo','US','Seattle'), /*Legend of Zelda US*/ /*Super Mario Brothers NES US*/
-																	(27, 'Konami','JP','Tokyo'), /*Where in Time is Carmen Sandiego? NES*/ /*Quest 64 N64*/ /*Suikoden Tatics PS2*/ /*Suikoden V PS2*/ /*Suikoden IV PS2*/ /*Suikoden III PS2*/ /*Suikoden II PS1*/ /*Suikoden PS1*/ /*Metal Gear Solid 4:Guns of the Patriots PS3*/ /*Rocket Knight Adventures Sega JP*/ /*Rocket Knight Adventures Sega US*/ /*Rocket Knight Adventures Sega EU*/
-																	(28, 'Sega','JP','Tokyo'), /*Shining in the darkness Sega*/ /*World of Illusion Starring Mickey Mouse and Donald Duck Sega*/ /*Sword OF Vermilion Sega*/ /*Valis III Sega*/
-																	(29, 'Masaya','JP','Tokyo'), /*Langrisser*/
-																	(30, 'Sony Computer Entertainment','US','San Matel'), /*Final Fantasy VII PS1 US*/
-																	(31, 'Sony Computer Entertainment','JP','Tokyo'), /*Final Fantasy VII PS1 JP*/ /*Time Crisis PS1*/ /*Wild Arms 2 PS1*/ /*White Knight Chronicles  II PS3*/ /*White Knight Chronicles  PS3*/
-																	(32, 'Sony Computer Entertainment','GB','London'), /*Final Fantasy VII PS1 EN*/
-																	(33, 'Squaresoft','JP','Tokyo'), /*Final Fantasy IX PS1*/ /*Final Fantasy XI PS2 and PC*/ /*Grandia III PS2*/ /*Grandia II PS2*/ /*Grandia PS1*/
-																	(34, 'Square Enix','JP','Tokyo'),/*Final Fantasy XIV PS3 PS4 PC*/
-																	(35, 'MARVELOUS!','JP','Tokyo'), /*Senran Kagura: Estival Versus PS4*/
-																	(36, 'Atari','US','New York City'), /*The Witcher PC*/ 
-																	(37, 'CD Projekt','PL','Warsaw'), /*The Witcher 2: Assassins of Kings PC + xbox360*/
-																	(38, 'Bandai Namco','JP','Tokyo'), /*The Witcher 3: Wild Hunt PC PS4*/ /*Tales of Symphonia Chronicales PS3*/ /*Sword Art Online: Lost Song PS4 PS3 PSVista*/
-																	(39, 'THQ','US','Agorura Hills'), /*Summoner 2 PS2 GameCube*/ /*Summoner PS2 PC*/
-																	(40, 'Marvelous USA','US','Torrance'), /*Wild Arms 4 PS2*/
-																	(41, 'Compile Heart','JP','Tokyo'), /*Fairy Fencer F PS3*/ /*Record of Agarest War Zero PS3 Xbox360*/
-																	(42, 'Nippon Ichi Software','JP','Kakamigahara'), /*HyperDimension Neptunia mk2 PS3 Playstation Vita*/ /*Cross Edge PS3*/ /*HyperDimension Neptunia V PS4*/ /*Trinity Universe PS3*/  /*The Guided Fate ParaDox PS3*/ /*Mugen Souls PS3*/ /*Mugen Souls Z PS3*/ /*Disgaea: Hour of Darkness PS2*/
-																	(43, 'Arcadia Systems','US','Costa Mesa'), /*Silver Surfer NES*/
-																	(44, 'Koei Tecmo Games','JP','Yokohama'), /*GrimGrimoire PS2*/
-																	(45, 'Namco','JP','Tokyo'), /*XenoSaga PS2*/
-																	(46, 'Telenet Japan','JP','Tokyo') /*Valis Sega*/ /*Valis II Sega*/ /*Traysia Sega*/
-																	;
+																
 																	
 
 /* Data entry for developer*/
@@ -479,7 +763,7 @@ insert into developer(developer_id, name, country_founded, city_founded) values 
 																	(26, 'Insomniac Games','US','Burbank'), /*Sunset Overdrive*/ 	
 																	(27, 'Capcom','JP','Chūō-ku'), /*Deadrising*/ /*rockman*/ /*Mega Man X SNES*/ /*Cross Edge PS3*/ /*Willow NES*/
 																	(28, 'Microsoft Studios','US','Redmond'), /*Fable*/
-																	(29, 'Lionhead Studios','GB','London')/*Fable 2*/
+																	(29, 'Lionhead Studios','GB','London'),/*Fable 2*/
 																	(30, 'Realtime','SCT','Dundee'),  /*Crackdown*/
 																	(31, 'Ruffian Games','SCT','Dundee'), /*Crackdown 2*/
 																	(32, 'Wanako Games','CL','Santiago'), /*Doritos Crash Course*/
@@ -700,7 +984,7 @@ insert into gameHasDeveloper (game_id, developer_id) values (1, 1),
 													(23, 22),
 													(24, 23),
 													(25, 24),
-													(26, 27)
+													(26, 27),
 													(27, 37),
 													(27, 38),
 													(28, 39),
