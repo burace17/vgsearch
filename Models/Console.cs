@@ -2,6 +2,6 @@ namespace vgsearch.Models
 {
     public class Console : Platform
     {
-        public int Generation { get; set; }
+        public int console_id { get; set; }
     }
 }

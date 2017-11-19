@@ -2,6 +2,6 @@ namespace vgsearch.Models
 {
     public class PC : Platform
     {
-        public string Store { get; set; }
+        public string OS { get; set; }
     }
 }
