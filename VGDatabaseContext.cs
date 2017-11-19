@@ -18,6 +18,10 @@ namespace vgsearch
            public DbSet<Region> Regions { get; set; }
            public DbSet<Release> Releases { get; set; }
 
+           // Linking entities
+           // Release <-> Platform
+           public DbSet<ReleasePlatform> ReleasePlatforms { get; set; }
+
            protected override void OnModelCreating(ModelBuilder builder)
            {
                builder.Entity<Developer>().ToTable("developer");
@@ -28,6 +32,7 @@ namespace vgsearch
                builder.Entity<Rating>().ToTable("ratings");
                builder.Entity<Region>().ToTable("region");
                builder.Entity<Release>().ToTable("releases");
+               builder.Entity<ReleasePlatform>().ToTable("releasehasplatform");
 
                // Many Releases to One Game.
                builder.Entity<Release>().HasOne(r => r.Game)
@@ -35,16 +40,20 @@ namespace vgsearch
                                         .HasForeignKey(r => r.game_id);
 
                // Many Releases to One Publisher
-               builder.Entity<Release>().HasOne(r => r.Publisher).WithMany().HasForeignKey(r => r.platform_id);
+               builder.Entity<Release>().HasOne(r => r.Publisher).WithMany().HasForeignKey(r => r.publisher_id);
 
                // Many Releases to One Rating
                builder.Entity<Release>().HasOne(r => r.Rating).WithMany().HasForeignKey(r => r.rating_id);
 
-               // Many Releases to One Platform
-               builder.Entity<Release>().HasOne(r => r.Platform).WithMany().HasForeignKey(r => r.platform_id);
-
                // Many Releases to One Region
                builder.Entity<Release>().HasOne(r => r.Region).WithMany().HasForeignKey(r => r.region_id);
+
+
+               // Linking entities
+               // One Release to Many Platforms
+               builder.Entity<ReleasePlatform>().HasKey(t => new { t.release_id, t.platform_id });
+               builder.Entity<ReleasePlatform>().HasOne(r => r.Release).WithMany(t => t.Platforms).HasForeignKey(r => r.release_id);
+
            }
        }
 }

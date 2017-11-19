@@ -41,7 +41,7 @@ namespace vgsearch.Controllers
                                                         [FromQuery]string region = null)
         {
             IQueryable<Game> queryable = _context.Games.Include(game => game.Releases);
-            _context.Releases.Include(r => r.Publisher).Include(r => r.Rating).Include(r => r.Platform).Include(r => r.Region);
+            _context.Releases.Include(r => r.Publisher).Include(r => r.Rating).Include(r => r.Region);
 
             if (name != null)
             {

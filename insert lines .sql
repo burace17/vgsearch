@@ -19,46 +19,56 @@ CREATE TABLE game(game_id SERIAL PRIMARY KEY,
 				  name VARCHAR(255) NOT NULL,
 				  comments VARCHAR(255));
 				  
-/*GRANT SELECT,INSERT,UPDATE,DELETE ON game TO vgsearch; */
+GRANT SELECT,INSERT,UPDATE,DELETE ON game TO vgsearch;
 
 create table ratings(rating_id INT PRIMARY KEY,
 				age INT NOT NULL,
 				name VARCHAR(255) NOT NULL);
-					
+GRANT SELECT,INSERT,UPDATE,DELETE ON ratings TO vgsearch;
+
 create table genre(genre_id INT PRIMARY KEY,
 				   name VARCHAR(255) NOT NULL);
-				   
+GRANT SELECT,INSERT,UPDATE,DELETE ON genre TO vgsearch;
+
 create table region(region_id INT PRIMARY KEY,
 				    name VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON region TO vgsearch;
 
 create table publisher(publisher_id INT PRIMARY KEY,
 					name VARCHAR(255) NOT NULL,
 					country_founded VARCHAR(255) NOT NULL,
 					city_founded VARCHAR(255));
+GRANT SELECT,INSERT,UPDATE,DELETE ON publisher TO vgsearch;
 
 create table developer(developer_id INT PRIMARY KEY,
 						name VARCHAR(255) NOT NULL,
 						country_founded VARCHAR(255) NOT NULL,
 						city_founded VARCHAR(255));
+GRANT SELECT,INSERT,UPDATE,DELETE ON developer TO vgsearch;
 				  				 
 
 create table platform(platform_id INT PRIMARY KEY,
 				      name VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON platform TO vgsearch;
 					  
 create table platISApc(platform_id INT NOT NULL,
 					   pc_id INT NOT NULL,
 				      PRIMARY KEY (platform_id, pc_id));
+GRANT SELECT,INSERT,UPDATE,DELETE ON platISApc TO vgsearch;
 					  
 create table platISAconsole(platform_id INT NOT NULL,
 							console_id INT NOT NULL,
 							PRIMARY KEY (platform_id, console_id));
+GRANT SELECT,INSERT,UPDATE,DELETE ON platISAconsole TO vgsearch;
 				 
 create table pc(pc_id INT PRIMARY KEY,
 				OS VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON pc TO vgsearch;
 				
 create table console(console_id INT PRIMARY KEY,
 				series VARCHAR(255) NOT NULL,
 				creator VARCHAR(255) NOT NULL);
+GRANT SELECT,INSERT,UPDATE,DELETE ON console TO vgsearch;
 				
 create table releases(release_id INT PRIMARY KEY,
 				  game_id INT NOT NULL,
@@ -70,6 +80,7 @@ create table releases(release_id INT PRIMARY KEY,
 				  FOREIGN KEY (publisher_id) REFERENCES publisher (publisher_id),
 				  FOREIGN KEY (region_id) REFERENCES region (region_id),
 				  dates date);
+GRANT SELECT,INSERT,UPDATE,DELETE ON releases TO vgsearch;
 				  
 				  
 create table gameHasGenre(
@@ -79,6 +90,7 @@ create table gameHasGenre(
 						FOREIGN KEY (game_id) REFERENCES game (game_id),
 						FOREIGN KEY (genre_id) REFERENCES genre(genre_id)
 						);
+GRANT SELECT,INSERT,UPDATE,DELETE ON gameHasGenre TO vgsearch;
 
 create table gameHasDeveloper(
 						game_id INT NOT NULL,
@@ -87,6 +99,8 @@ create table gameHasDeveloper(
 						FOREIGN KEY (game_id) REFERENCES game (game_id),
 						FOREIGN KEY (developer_id) REFERENCES developer(developer_id)
 						);
+GRANT SELECT,INSERT,UPDATE,DELETE ON gameHasDeveloper TO vgsearch;
+
 
 create table releaseHasPlatform(
                         release_id INT NOT NULL,
@@ -95,6 +109,7 @@ create table releaseHasPlatform(
 						FOREIGN KEY (release_id) REFERENCES releases (release_id),
 						FOREIGN KEY (platform_id) REFERENCES platform(platform_id)
 						);
+GRANT SELECT,INSERT,UPDATE,DELETE ON releaseHasPlatform TO vgsearch;
 
 
 
