@@ -27,3 +27,11 @@
         </tr>
     }
 </table>
+
+<h4>Genres</h4>
+<ul>
+    @foreach(var genre in Model.Genres)
+    {
+        <li>@genre.Genre.name</li>
+    }
+</ul>

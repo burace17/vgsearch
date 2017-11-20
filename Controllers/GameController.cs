@@ -30,6 +30,12 @@ namespace vgsearch.Controllers
             // Populate the collection of game releases.
             await _context.Entry(game).Collection(g => g.Releases).LoadAsync();
 
+            await _context.Entry(game).Collection(g => g.Genres).LoadAsync();
+            foreach (var genre in game.Genres)
+            {
+                await _context.Entry(genre).Reference(g => g.Genre).LoadAsync();
+            }
+
             _context.ReleasePlatforms.Include(rp => rp.Platform);
 
             foreach (var r in game.Releases)

@@ -21,6 +21,7 @@ namespace vgsearch
            // Linking entities
            // Release <-> Platform
            public DbSet<ReleasePlatform> ReleasePlatforms { get; set; }
+           public DbSet<GameGenre> GameGenres { get; set; }
 
            protected override void OnModelCreating(ModelBuilder builder)
            {
@@ -33,6 +34,7 @@ namespace vgsearch
                builder.Entity<Region>().ToTable("region");
                builder.Entity<Release>().ToTable("releases");
                builder.Entity<ReleasePlatform>().ToTable("releasehasplatform");
+               builder.Entity<GameGenre>().ToTable("gamehasgenre");
 
                // Many Releases to One Game.
                builder.Entity<Release>().HasOne(r => r.Game)
@@ -54,6 +56,10 @@ namespace vgsearch
                builder.Entity<ReleasePlatform>().HasKey(t => new { t.release_id, t.platform_id });
                builder.Entity<ReleasePlatform>().HasOne(r => r.Release).WithMany(t => t.Platforms).HasForeignKey(r => r.release_id);
 
+               // Many Games to Many Genres (these must be represented as two one-to-many relations)
+               builder.Entity<GameGenre>().HasKey(gg => new { gg.game_id, gg.genre_id });
+               builder.Entity<GameGenre>().HasOne(gg => gg.Game).WithMany(g => g.Genres).HasForeignKey(gg => gg.game_id);
+               builder.Entity<GameGenre>().HasOne(gg => gg.Genre).WithMany(ge => ge.Games).HasForeignKey(gg => gg.genre_id);
            }
        }
 }

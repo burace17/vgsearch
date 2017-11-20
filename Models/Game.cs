@@ -9,11 +9,13 @@ namespace vgsearch.Models
         public Game()
         {
             Releases = new List<Release>();
+            Genres = new List<GameGenre>();
         }
         [Key]
         public int game_id { get; set; }
         public string name { get; set; }
         public string comments { get; set; }
-        public ICollection<Release> Releases { get; set; }
+        public List<GameGenre> Genres { get; set; }
+        public List<Release> Releases { get; set; }
     }
 }
