@@ -38,11 +38,13 @@ namespace vgsearch.Controllers
         public async Task<IActionResult> AdvancedSearch([FromQuery]string name = null, [FromQuery]string comment = null,
                                                         [FromQuery]string date = null, [FromQuery]string publisher = null,
                                                         [FromQuery]string rating = null, [FromQuery]string platform = null,
-                                                        [FromQuery]string region = null, [FromQuery]string genre = null)
+                                                        [FromQuery]string region = null, [FromQuery]string genre = null,
+                                                        [FromQuery]string developer = null)
         {
             IQueryable<Game> queryable = _context.Games.Include(game => game.Releases);
             _context.Releases.Include(r => r.Publisher).Include(r => r.Rating).Include(r => r.Region);
             _context.GameGenres.Include(gg => gg.Genre);
+            _context.GameDevelopers.Include(gd => gd.Developer);
 
             if (name != null)
             {
@@ -71,6 +73,10 @@ namespace vgsearch.Controllers
             if (genre != null)
             {
                 queryable = queryable.Where(x => x.Genres.Any(g => g.Genre.name == genre)); // TODO: allow searching by multiple genres..
+            }
+            if (developer != null)
+            {
+                queryable = queryable.Where(x => x.Developers.Any(d => d.Developer.name == developer));
             }
 
             var result = await queryable.ToListAsync();

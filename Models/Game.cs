@@ -10,6 +10,7 @@ namespace vgsearch.Models
         {
             Releases = new List<Release>();
             Genres = new List<GameGenre>();
+            Developers = new List<GameDeveloper>();
         }
         [Key]
         public int game_id { get; set; }
@@ -17,5 +18,6 @@ namespace vgsearch.Models
         public string comments { get; set; }
         public List<GameGenre> Genres { get; set; }
         public List<Release> Releases { get; set; }
+        public List<GameDeveloper> Developers { get; set; }
     }
 }
