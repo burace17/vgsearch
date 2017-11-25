@@ -42,6 +42,7 @@ namespace vgsearch.Controllers
             {
                 await _context.Entry(r).Reference(re => re.Publisher).LoadAsync();
                 await _context.Entry(r).Reference(re => re.Region).LoadAsync();
+                await _context.Entry(r).Reference(re => re.Rating).LoadAsync();
                 await _context.Entry(r).Collection(re => re.Platforms).LoadAsync();
                 foreach (var rp in r.Platforms)
                 {

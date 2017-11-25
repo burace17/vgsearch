@@ -10,6 +10,7 @@
         <th>Date</th>
         <th>Publisher</th>
         <th>Region</th>
+        <th>Rating</th>
         <th>Platform</th>
     </tr>
     @foreach(var release in Model.Releases)
@@ -18,10 +19,11 @@
             <td>@release.dates.ToString("MM/dd/yyyy")</td>
             <td>@release.Publisher</td>
             <td>@release.Region</td>
+            <td>@release.Rating</td>
             <td>
                 @foreach (var platform in release.Platforms)
                 {
-                    @(platform.Platform.name + ", ")
+                    @(platform.Platform + ", ")
                 }
             </td>
         </tr>
@@ -32,6 +34,6 @@
 <ul>
     @foreach(var genre in Model.Genres)
     {
-        <li>@genre.Genre.name</li>
+        <li>@genre.Genre</li>
     }
 </ul>
