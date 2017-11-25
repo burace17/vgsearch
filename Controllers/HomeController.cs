@@ -38,6 +38,8 @@ namespace vgsearch.Controllers
         {
             ViewData["Regions"] = await _context.Regions.ToListAsync();
             ViewData["Genres"] = await _context.Genres.ToListAsync();
+            ViewData["Ratings"] = await _context.Ratings.ToListAsync();
+            ViewData["Platforms"] = await _context.Platforms.ToListAsync();
             return View();
         }
 
