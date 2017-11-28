@@ -17,7 +17,7 @@ namespace vgsearch.Models
         public int publisher_id { get; set; }
         public int region_id { get; set; }
         public int game_id { get; set; }
-        public DateTime dates { get; set; }
+        public DateTime? dates { get; set; }
         public Rating Rating { get; set; }
         public Publisher Publisher { get; set; }
         public Region Region { get; set; }

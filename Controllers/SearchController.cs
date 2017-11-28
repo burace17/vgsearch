@@ -42,7 +42,7 @@ namespace vgsearch.Controllers
                                                         [FromQuery]string developer = null)
         {
             IQueryable<Game> queryable = _context.Games.Include(game => game.Releases);
-            _context.Releases.Include(r => r.Publisher).Include(r => r.Rating).Include(r => r.Region);
+            _context.Releases.Include(r => r.Publisher).Include(r => r.Rating).Include(r => r.Region).Include(r => r.dates);
             _context.GameGenres.Include(gg => gg.Genre);
             _context.GameDevelopers.Include(gd => gd.Developer);
 
@@ -56,7 +56,7 @@ namespace vgsearch.Controllers
             }
             if (date != null)
             {
-                queryable = queryable.Where(x => x.Releases.Any(r => r.dates.ToString() == date)); // TODO: Check date formatting...
+                queryable = queryable.Where(x => x.Releases.Any(r => r.dates != null && r.dates.ToString() == date)); // TODO: Check date formatting...
             }
             if (publisher != null)
             {

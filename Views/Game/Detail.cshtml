@@ -16,7 +16,16 @@
     @foreach(var release in Model.Releases)
     {
         <tr>
-            <td>@release.dates.ToString("MM/dd/yyyy")</td>
+            <td>
+                @if (release.dates != null)
+                {
+                    @release.dates.Value.ToString("MM/dd/yyyy")
+                }
+                else
+                {
+                    @("N/A")
+                }
+            </td>
             <td>@release.Publisher</td>
             <td>@release.Region</td>
             <td>@release.Rating</td>
