@@ -21,6 +21,72 @@ ViewData["Regions"] gives a list of region objects, as does ViewData["Genres"]
     ViewData["Title"] = "Advanced Search";
 }
 
-<form action="/Search/AdvancedSearch">
+<form action="/Search/AdvancedSearch" id="advanced-search">
+    <div class="form-group">
+        <label for="gameTitle">Title</label>
+        <input name="name" id="gameTitle" />
+    </div>
 
+    <div class="form-group">
+        <label for="gameDev">Developer</label>
+        <input name="developer" id="gameDev" />
+    </div>
+       
+    <div class="form-group">
+        <label for="gamePublisher">Publisher</label>
+        <input name="publisher" id="gamePublisher"/>
+    </div>
+        
+    <div class="form-group">
+        <label for="gameRegion">Region</label>
+        <select name="region" id="gameRegion">
+            <option>(any)</option>
+            @foreach (var region in (List<Region>)ViewData["Regions"])
+            {
+                <option value="@region">@region</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="gameRating">Rating</label>
+        <select name="rating" id="gameRating">
+            <option>(any)</option>
+            @foreach (var rating in (List<Rating>)ViewData["Ratings"])
+            {
+                <option value="@rating">@rating</option>
+            }
+        </select>
+    </div>  
+
+    <div class="form-group">
+        <label for="gameGenre">Genre</label>
+        <select name="genre" id="gameGenre">
+            <option>(any)</option>
+            @foreach (var genre in (List<Genre>)ViewData["Genres"])
+            {
+                <option value="@genre">@genre</option>
+            }
+        </select>
+    </div>  
+   
+    <div class="form-group">
+        <label for="gamePlatform">Platform</label>
+        <select name="platform" id="gamePlatform">
+            <option>(any)</option>
+            @foreach (var platform in (List<Platform>)ViewData["Platforms"])
+            {
+                <option value="@platform">@platform</option>
+            }
+        </select>
+    </div> 
+
+    <div class="form-group">
+        <label for="gameRelease">Release Date</label>
+        <input name="date" id="gameRelease" />
+    </div>
+
+    <input type="submit" class="btn btn-default" type="button">Search</input>
 </form>
+
+<script src="~/js/exclude-empty-inputs.js"></script>
