@@ -60,27 +60,27 @@ namespace vgsearch.Controllers
             }
             if (publisher != null)
             {
-                queryable = queryable.Where(x => x.Releases.Any(r => r.Publisher.name == publisher));
+                queryable = queryable.Where(x => x.Releases.Any(r => r.Publisher.name.ToLower() == publisher.ToLower()));
             }
             if (rating != null)
             {
-                queryable = queryable.Where(x => x.Releases.Any(r => r.Rating.name == rating));
+                queryable = queryable.Where(x => x.Releases.Any(r => r.Rating.name.ToLower() == rating.ToLower()));
             }
             if (region != null)
             {
-                queryable = queryable.Where(x => x.Releases.Any(r => r.Region.name == region));
+                queryable = queryable.Where(x => x.Releases.Any(r => r.Region.name.ToLower() == region.ToLower()));
             }
             if (genre != null)
             {
-                queryable = queryable.Where(x => x.Genres.Any(g => g.Genre.name == genre)); // TODO: allow searching by multiple genres..
+                queryable = queryable.Where(x => x.Genres.Any(g => g.Genre.name.ToLower() == genre.ToLower())); // TODO: allow searching by multiple genres..
             }
             if (developer != null)
             {
-                queryable = queryable.Where(x => x.Developers.Any(d => d.Developer.name == developer));
+                queryable = queryable.Where(x => x.Developers.Any(d => d.Developer.name.ToLower() == developer.ToLower()));
             }
             if (platform != null)
             {
-                queryable = queryable.Where(x => x.Releases.Any(r => r.Platforms.Any(p => p.Platform.name == platform)));
+                queryable = queryable.Where(x => x.Releases.Any(r => r.Platforms.Any(p => p.Platform.name == platform.ToLower())));
             }
 
             var result = await queryable.ToListAsync();
