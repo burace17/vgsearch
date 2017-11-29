@@ -56,7 +56,7 @@ namespace vgsearch.Controllers
             }
             if (date != null)
             {
-                queryable = queryable.Where(x => x.Releases.Any(r => r.dates != null && r.dates.ToString() == date)); // TODO: Check date formatting...
+                queryable = queryable.Where(x => x.Releases.Any(r => r.dates != null && r.dates.Value.ToString("MM/dd/yyyy") == date)); // TODO: Check date formatting...
             }
             if (publisher != null)
             {
