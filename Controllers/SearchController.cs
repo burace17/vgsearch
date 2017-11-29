@@ -78,6 +78,10 @@ namespace vgsearch.Controllers
             {
                 queryable = queryable.Where(x => x.Developers.Any(d => d.Developer.name == developer));
             }
+            if (platform != null)
+            {
+                queryable = queryable.Where(x => x.Releases.Any(r => r.Platforms.Any(p => p.Platform.name == platform)));
+            }
 
             var result = await queryable.ToListAsync();
 
