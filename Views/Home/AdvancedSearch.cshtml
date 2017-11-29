@@ -21,6 +21,45 @@ ViewData["Regions"] gives a list of region objects, as does ViewData["Genres"]
     ViewData["Title"] = "Advanced Search";
 }
 
-<form action="/Search/AdvancedSearch">
+<form id="advanced-search" action="/Search/AdvancedSearch">
 
+            
+                        <label for="contain">Developer</label>
+                                    <input class="form-control" type="text" name = "developer" />
+                                
+                                    <label for="contain">Publisher</label>
+                                    <input class="form-control" type="text" name = "publisher" />
+                                  
+                                    <label for="filter">Region</label>
+                                    <select class="form-control" name= "region">
+                                    <option selected>(any)</option>
+                                    @foreach (var platform in (List<Region>)ViewData["Regions"]){
+                                        <option value = "@platform"> @platform</option>
+                                    }
+                                    </select>
+                                  
+                                  
+                                    <label for="contain">Genre</label>
+                                    <select class="form-control" name = "genre">
+                                    <option selected>(any)</option>
+                                    @foreach (var platform in (List<Genre>)ViewData["Genres"]){
+                                        <option value = "@platform"> @platform</option>
+                                    }
+                                  </select>
+                                  
+                                    <label for="contain">Rating</label>
+                                    <select class="form-control" name = "rating">
+                                        <option selected>(any)</option>
+                                    @foreach (var platform in (List<Rating>)ViewData["Ratings"]){
+                                        <option value = "@platform"> @platform</option>
+                                    }
+                                    </select>
+                                  
+                                  
+                                    <label for="contain">Release Date</label>
+                                    <input class="form-control" type="text" name = "date" />
+                                  
+                                  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                       
 </form>
+<script src="~/js/exclude-empty-inputs.js"></script> 
