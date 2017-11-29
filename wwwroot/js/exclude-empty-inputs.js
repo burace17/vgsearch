@@ -1,3 +1,10 @@
+// Make sure we don't allow the browser to cache the page
+window.onpageshow = function(event)
+{
+    if (event.persisted)
+        window.location.reload();
+}
+
 var form = document.getElementById("advanced-search");
 
 form.addEventListener('submit', function()
